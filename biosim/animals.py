@@ -9,4 +9,8 @@ __email__ = 'pelangda@nmbu.no'
 
 
 class Animal:
-    pass
+    """
+    This is the superclass we will be using for all animals
+    """
+    def __init__(self):
+        pass
