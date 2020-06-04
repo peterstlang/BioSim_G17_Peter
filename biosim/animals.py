@@ -24,7 +24,10 @@ class Animal:
         :param weight: int or float
         """
         self.age = age
-        self.weight = weight
+        self.weight = self.birth_weight(self.parameters) if self.age == 0 else\
+            weight
+        self.fitness = self.compute_fitness(self.age, self.weight,
+                                            self.parameters)
 
     @staticmethod
     def compute_q(oneplusmin, x, x_half, phi):
@@ -48,9 +51,20 @@ class Animal:
         :param p:
         :return:
         """
-        fitness = cls.compute_q(+1, age, p['a_half'], p['phi_age']) * \
-                  cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
-        return fitness
+        fit = cls.compute_q(+1, age, p['a_half'], p['phi_age']) * \
+              cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
+        return fit
+
+    def recalculate_fitness(self):
+        """
+        recalculates and updates fitness based on
+        new and updated values of age and weight.
+        A lot of things affect the fitness, which is
+        why we need this function
+        :return:
+        """
+        self.fitness = self.compute_fitness(self.age, self.weight,
+                                            self.parameters)
 
     def update_age(self):
         """
