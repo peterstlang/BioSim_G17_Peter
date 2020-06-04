@@ -52,7 +52,7 @@ class Animal:
         :return:
         """
         fit = cls.compute_q(+1, age, p['a_half'], p['phi_age']) * \
-              cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
+            cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
         return fit
 
     def recalculate_fitness(self):
@@ -73,8 +73,18 @@ class Animal:
         """
         self.age += 1
 
-    def migrate(self):
-        pass
+    def migration_probability(self):
+        """
+        This method calculates the chance of an animal to move to a
+        different cell. This method doesn't decide which square.
+        :return:
+        """
+
+        prob_mig = self.parameters['mu'] * self.fitness
+        random_num = np.random.random()
+        return prob_mig > random_num
+
+
 
     @classmethod
     def birth_weight(cls, p):
@@ -84,6 +94,23 @@ class Animal:
         :return:
         """
         return np.random.normal(p['w_birth'], p['sigma_birth'])
+
+    def weight_loss(self):
+        """
+        This method deals with how much weight an animal loses each year.
+        :return:
+        """
+        self.weight -= self.weight * self.parameters['eta']
+        self.recalculate_fitness()
+
+    def weight_after_birth(self, weight):
+        """
+
+        :param weight:
+        :return:
+        """
+        self.weight -= self.parameters['xi'] * weight
+        self.recalculate_fitness()
 
 
 class Herbivore(Animal):
