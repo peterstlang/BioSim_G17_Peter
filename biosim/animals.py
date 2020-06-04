@@ -41,6 +41,13 @@ class Animal:
 
     @classmethod
     def compute_fitness(cls, age, weight, p):
+        """
+        This method uses q to compute the fitness of an animal
+        :param age:
+        :param weight:
+        :param p:
+        :return:
+        """
         fitness = cls.compute_q(+1, age, p['a_half'], p['phi_age']) * \
                   cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
         return fitness
@@ -48,7 +55,7 @@ class Animal:
     def update_age(self):
         """
         This method updates the animals age for every year that passes
-        :return: new age
+        :return: updated year
         """
         self.age += 1
 
