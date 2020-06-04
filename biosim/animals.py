@@ -24,9 +24,19 @@ class Animal:
         :param weight: int or float
         """
         self.age = age
+        self.weight = weight
 
     @staticmethod
     def compute_q(oneplusmin, x, x_half, phi):
+        """
+        this function computes q, which will be used when we compute the
+        fitness off the animal.
+        :param oneplusmin:
+        :param x:
+        :param x_half:
+        :param phi:
+        :return:
+        """
         return 1 / (1 + np.exp(oneplusmin * phi * (x - x_half)))
 
     @classmethod
@@ -34,6 +44,16 @@ class Animal:
         fitness = cls.compute_q(+1, age, p['a_half'], p['phi_age']) * \
                   cls.compute_q(-1, weight, p['w_half'], p['phi_weight'])
         return fitness
+
+    def update_age(self):
+        """
+        This method updates the animals age for every year that passes
+        :return: new age
+        """
+        self.age += 1
+
+    def migrate(self):
+        pass
 
 
 class Herbivore(Animal):
