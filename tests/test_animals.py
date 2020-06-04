@@ -13,10 +13,17 @@ from biosim.animals import Animal, Herbivore
 class TestAnimal:
 
     def test_herbivore_age(self):
-        Tim = Herbivore()
-        assert Tim.age == 0
+        tim = Herbivore()
+        assert tim.age == 0
 
     def test_update_age(self):
-        carl = Animal()
+        carl = Herbivore()
         carl.update_age()
         assert carl.age == 1
+
+    def test_birth_weight(self):
+        john = Herbivore()
+        assert john.weight >= 0
+
+
+
