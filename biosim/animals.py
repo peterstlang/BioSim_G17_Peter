@@ -107,6 +107,19 @@ class Animal:
         self.weight -= self.parameters['xi'] * weight
         self.recalculate_fitness()
 
+    def death(self):
+        """
+
+        :return:
+        """
+        if self.weight == 0:
+            return True
+        else:
+            prob_death = self.parameters['omega'] * ( 1 - self.fitness)
+            random_num = np.random.random()
+            return prob_death > random_num
+
+
 
 class Herbivore(Animal):
     """
