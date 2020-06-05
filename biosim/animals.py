@@ -17,6 +17,10 @@ class Animal:
     """
     parameters = {}
 
+    @classmethod
+    def set_parameters(cls, parameters):
+        cls.parameters.update(parameters)
+
     def __init__(self, age=0, weight=None):
         """
         Constructor for the Animal superclass
