@@ -17,13 +17,13 @@ class TestAnimal:
         assert tim.age == 0
 
     def test_update_age(self):
-        carl = Herbivore()
-        carl.update_age()
-        assert carl.age == 1
+        tim = Herbivore()
+        tim.update_age()
+        assert tim.age == 1
 
     def test_birth_weight(self):
-        john = Herbivore()
-        assert john.weight >= 0
+        tim = Herbivore()
+        assert tim.weight >= 0
 
 
 
