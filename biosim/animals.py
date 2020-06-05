@@ -185,9 +185,13 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
+    def kill_herb(self):
+        pass
+
 
 if __name__ == "__main__":
     h = Herbivore(age=1, weight=7)
     print(h.fitness)
     print(h.age)
     print(h.weight)
+    print(h.age)
