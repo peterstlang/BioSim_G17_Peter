@@ -19,28 +19,29 @@ class Animal:
 
     def __init__(self, age=0, weight=None):
         """
-        Animal class constructor.
-        :param age: int
-        :param weight: int or float
+        Constructor for the Animal superclass
+        :param age:
+        :param weight:
         """
         self.age = age
-        self.weight = self.birth_weight(self.parameters) if self.age == 0 else\
-            weight
+        self.weight = np.random.normal(self.parameters['w_birth'],
+                                       self.parameters['sigma_birth'])\
+            if self.age == 0 else weight
         self.fitness = self.compute_fitness(self.age, self.weight,
                                             self.parameters)
 
     @staticmethod
-    def compute_q(oneplusmin, x, x_half, phi):
+    def compute_q(sign, x, x_half, phi):
         """
         this function computes q, which will be used when we compute the
         fitness off the animal.
-        :param oneplusmin:
+        :param sign:
         :param x:
         :param x_half:
         :param phi:
         :return:
         """
-        return 1 / (1 + np.exp(oneplusmin * phi * (x - x_half)))
+        return 1 / (1 + np.exp(sign * phi * (x - x_half)))
 
     @classmethod
     def compute_fitness(cls, age, weight, p):
@@ -84,16 +85,6 @@ class Animal:
         random_num = np.random.random()
         return prob_mig > random_num
 
-
-
-    @classmethod
-    def birth_weight(cls, p):
-        """
-
-        :param p:
-        :return:
-        """
-        return np.random.normal(p['w_birth'], p['sigma_birth'])
 
     def weight_loss(self):
         """
