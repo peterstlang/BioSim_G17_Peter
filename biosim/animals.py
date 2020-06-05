@@ -20,8 +20,8 @@ class Animal:
     @classmethod
     def set_parameters(cls, parameters):
         cls.parameters.update(parameters)
-        #Check if its a dict
-        #Check if the parameters are legal
+        # Check if its a dict
+        # Check if the parameters are legal
 
     def __init__(self, age=0, weight=None):
         """
@@ -29,14 +29,14 @@ class Animal:
         :param age:
         :param weight:
         """
-        #need some more additions but will add at a later point
+        # need some more additions but will add at a later point
         self.age = age
         if weight is None:
             self.weight = self.weight_at_birth()
         else:
             self.weight = weight
-        self.fitness = self.compute_fitness(self.age, self.weight,
-                                            self.parameters)
+        self.fitness = self.compute_fitness()
+
 
     @staticmethod
     def compute_q(sign, x, x_half, phi):
@@ -61,7 +61,7 @@ class Animal:
         """
         p = self.parameters
         fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-            self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+              self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
         return fit
 
     def recalculate_fitness(self):
@@ -186,4 +186,8 @@ class Carnivore(Animal):
         super().__init__(age, weight)
 
 
-
+if __name__ == "__main__":
+    h = Herbivore(age=1, weight=7)
+    print(h.fitness)
+    print(h.age)
+    print(h.weight)
