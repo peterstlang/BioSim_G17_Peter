@@ -52,10 +52,7 @@ class Animal:
 
     def compute_fitness(self):
         """
-        This method uses q to compute the fitness of an animal
-        :param age:
-        :param weight:
-        :param p:
+
         :return:
         """
         p = self.parameters
@@ -193,6 +190,3 @@ if __name__ == "__main__":
     h.yearly_weight_loss()
     h.update_age()
     print(h.age, h.fitness)
-
-
-

@@ -24,6 +24,3 @@ class TestAnimal:
     def test_birth_weight(self):
         tim = Herbivore()
         assert tim.weight >= 0
-
-
-
