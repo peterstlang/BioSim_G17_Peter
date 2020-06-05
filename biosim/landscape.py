@@ -7,13 +7,22 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
+from biosim.animals import Animal, Herbivore, Carnivore
+import numpy as np
+
 
 class Cell:
     """
     cell superclass
     """
+    parameters = {}
 
     def __init__(self):
+        self.fodder = 0
+        self.animals_in_cell = {}
+
+    @classmethod
+    def set_parameters(cls):
         pass
 
     def grow_fodder(self):

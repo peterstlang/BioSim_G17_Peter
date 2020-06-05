@@ -87,9 +87,9 @@ class Animal:
         :return:
         """
 
-        prob_mig = self.parameters['mu'] * self.fitness
+        prob_move = self.parameters['mu'] * self.fitness
         random_num = np.random.random()
-        return prob_mig > random_num
+        return prob_move > random_num
 
     def weight_at_birth(self):
         return np.random.normal(self.parameters['w_birth'],
