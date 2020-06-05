@@ -6,3 +6,11 @@
 
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
+
+
+class Cell:
+    """
+    cell superclass
+    """
+    def __init__(self):
+        pass

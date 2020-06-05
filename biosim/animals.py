@@ -37,7 +37,6 @@ class Animal:
             self.weight = weight
         self.fitness = self.compute_fitness()
 
-
     @staticmethod
     def compute_q(sign, x, x_half, phi):
         """
@@ -61,7 +60,7 @@ class Animal:
         """
         p = self.parameters
         fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-              self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+            self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
         return fit
 
     def recalculate_fitness(self):
@@ -72,8 +71,7 @@ class Animal:
         why we need this function
         :return:
         """
-        self.fitness = self.compute_fitness(self.age, self.weight,
-                                            self.parameters)
+        self.fitness = self.compute_fitness()
 
     def update_age(self):
         """
@@ -117,12 +115,12 @@ class Animal:
         p = self.parameters
         rand_num = np.random.random()
         prob_birth = np.min(1, p['gamma'] * self.fitness * (num_animals - 1))
-        if self.weight < p['zeta'] * (['w_birth'] + ['sigma_birth']):
+        if self.weight < p['zeta'] * (p['w_birth'] + p['sigma_birth']):
             return False
         else:
             return rand_num < prob_birth
 
-    def weight_loss_per_year(self):
+    def yearly_weight_loss(self):
         """
         This method deals with how much weight an animal loses each year.
         :return:
@@ -191,7 +189,10 @@ class Carnivore(Animal):
 
 if __name__ == "__main__":
     h = Herbivore(age=1, weight=7)
-    print(h.fitness)
-    print(h.age)
-    print(h.weight)
-    print(h.age)
+    print(h.compute_fitness())
+    h.yearly_weight_loss()
+    h.update_age()
+    print(h.age, h.fitness)
+
+
+
