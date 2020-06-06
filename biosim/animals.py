@@ -107,6 +107,11 @@ class Animal:
         return food_eaten
 
     def give_birth(self, num_animals):
+        """
+
+        :param num_animals:
+        :return:
+        """
         if num_animals < 2:
             return False
         p = self.parameters
@@ -186,7 +191,4 @@ class Carnivore(Animal):
 
 if __name__ == "__main__":
     h = Herbivore(age=1, weight=7)
-    print(h.compute_fitness())
-    h.yearly_weight_loss()
-    h.update_age()
-    print(h.age, h.fitness)
+
