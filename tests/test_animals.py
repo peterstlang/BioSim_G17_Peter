@@ -7,10 +7,22 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
-from biosim.animals import Animal, Herbivore
+from biosim.animals import Animal, Herbivore, Carnivore
 
 
 class TestAnimal:
+
+    def test_constructor(self):
+        h = Herbivore()
+        c = Carnivore()
+        assert isinstance(h, Herbivore)
+        assert isinstance(c, Carnivore)
+
+    def test_subclass(self):
+        h = Herbivore()
+        c = Carnivore()
+        assert issubclass(h.__class__, Animal)
+        assert issubclass(c.__class__, Animal)
 
     def test_herbivore_age(self):
         h = Herbivore()
