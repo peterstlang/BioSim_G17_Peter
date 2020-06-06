@@ -19,8 +19,15 @@ class Animal:
 
     @classmethod
     def set_parameters(cls, parameters):
+        """
+
+        :param parameters:
+        :return:
+        """
+        if not isinstance(parameters, dict):
+            raise TypeError('Parameters must be of type dict')
+
         cls.parameters.update(parameters)
-        # Check if its a dict
         # Check if the parameters are legal
 
     def __init__(self, age=0, weight=None):
