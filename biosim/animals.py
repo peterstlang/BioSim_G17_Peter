@@ -27,8 +27,11 @@ class Animal:
         if not isinstance(parameters, dict):
             raise TypeError('Parameters must be of type dict')
 
+        #for key in parameters:
+        #    if key not in parameters:
+        #        raise KeyError('Invalid parameter name: ' + key)
+
         cls.parameters.update(parameters)
-        # Check if the parameters are legal
 
     def __init__(self, age=0, weight=None):
         """
@@ -37,6 +40,9 @@ class Animal:
         :param weight:
         """
         # need some more additions but will add at a later point
+        if not isinstance(age, int):
+            raise TypeError('age must be of type int')
+
         self.age = age
         if weight is None:
             self.weight = self.weight_at_birth()
@@ -198,4 +204,5 @@ class Carnivore(Animal):
 
 if __name__ == "__main__":
     h = Herbivore(age=1, weight=7)
+    print(h.age)
 
