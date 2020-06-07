@@ -42,6 +42,7 @@ class Cell:
 
     def procreation_herbivores(self):
         herb_offpsring = []
+        num_adult_herbs = len(self.herbivores)
 
 
     def aging_animals(self):
