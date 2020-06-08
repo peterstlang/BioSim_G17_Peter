@@ -18,20 +18,21 @@ class Animal:
     parameters = {}
 
     @classmethod
-    def set_parameters(cls, parameters):
+    def set_parameters(cls, new_parameters):
         """
 
-        :param parameters:
+        :param new_parameters:
         :return:
         """
-        if not isinstance(parameters, dict):
+        if not isinstance(new_parameters, dict):
             raise TypeError('Parameters must be of type dict')
 
-        #for key in parameters:
-        #    if key not in parameters:
-        #        raise KeyError('Invalid parameter name: ' + key)
+        #Heavily inspired by the biolab project
+        for key in new_parameters:
+            if key not in cls.parameters:
+                raise KeyError('Invalid parameter name: ' + key)
 
-        cls.parameters.update(parameters)
+        cls.parameters.update(new_parameters)
 
     def __init__(self, age=0, weight=None):
         """
