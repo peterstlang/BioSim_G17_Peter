@@ -27,7 +27,7 @@ class Animal:
         if not isinstance(new_parameters, dict):
             raise TypeError('Parameters must be of type dict')
 
-        #Heavily inspired by the biolab project
+        # Heavily inspired by the biolab project
         for key in new_parameters:
             if key not in cls.parameters:
                 raise KeyError('Invalid parameter name: ' + key)
@@ -41,8 +41,17 @@ class Animal:
         :param weight:
         """
         # need some more additions but will add at a later point
-        if not isinstance(age, int):
+        if age != int(age):
             raise TypeError('age must be of type int')
+
+        if age < 0:
+            raise TypeError('age must be a positive integer')
+
+        if weight is not None:
+            if not isinstance(weight, (float, int)):
+                raise TypeError('weight must be of type float or int')
+            if weight < 0:
+                raise ValueError('weight must be a positive number')
 
         self.age = age
         if weight is None:
@@ -199,9 +208,3 @@ class Carnivore(Animal):
 
     def kill_herb(self):
         pass
-
-
-if __name__ == "__main__":
-    h = Herbivore(age=1, weight=7)
-    print(h.age)
-
