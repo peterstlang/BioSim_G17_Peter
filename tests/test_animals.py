@@ -24,6 +24,9 @@ class TestAnimal:
         assert issubclass(h.__class__, Animal)
         assert issubclass(c.__class__, Animal)
 
+    def test_value_error_age(self):
+        pass
+
     def test_herbivore_age(self):
         h = Herbivore()
         assert h.age == 0
@@ -41,3 +44,8 @@ class TestAnimal:
         h = Herbivore(age=1, weight=7)
         h.yearly_weight_loss()
         assert h.weight < 7
+
+    def test_compute_fitness_with_no_weight(self):
+        h = Herbivore(1, 0)
+        h.compute_fitness()
+        assert h.fitness == 0
