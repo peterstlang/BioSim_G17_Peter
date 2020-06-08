@@ -32,11 +32,6 @@ class Cell:
     def grow_fodder(self):
         pass
 
-    # def randomise_herb_list(self):
-    #    our_list = self.herbivores
-    #    np.random.shuffle(our_list)
-    #    return our_list
-
     def place_animals(self, list_animals):
         if not isinstance(list_animals, list):
             raise TypeError('list_animals myst be type list')
