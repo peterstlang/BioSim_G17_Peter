@@ -19,6 +19,11 @@ class Cell:
 
     @classmethod
     def set_parameters(cls, parameters):
+        """
+
+        :param parameters:
+        :return:
+        """
 
         if not isinstance(parameters, dict):
             raise TypeError('parameters must be of type dict')
@@ -26,13 +31,26 @@ class Cell:
         cls.parameters.update(parameters)
 
     def __init__(self):
+        """
+
+        """
         self.fodder = 0
         self.herbivores = []
+        self.carnivores = []
 
     def grow_fodder(self):
+        """
+
+        :return:
+        """
         pass
 
     def place_animals(self, list_animals):
+        """
+
+        :param list_animals:
+        :return:
+        """
         if not isinstance(list_animals, list):
             raise TypeError('list_animals myst be type list')
 
@@ -40,10 +58,19 @@ class Cell:
             self.herbivores.append(animal)
 
     def remove_animals(self, animal):
+        """
+
+        :param animal:
+        :return:
+        """
         animal_to_remove = self.herbivores
         animal_to_remove.remove(animal)
 
     def feed_herbivores(self):
+        """
+
+        :return:
+        """
         np.random.shuffle(self.herbivores)
 
         for herb in self.herbivores:
@@ -52,14 +79,26 @@ class Cell:
             self.fodder -= food_eaten
 
     def feed_carnivores(self):
+        """
+
+        :return:
+        """
         pass
 
     def feed_animals(self):
+        """
+        This method handles the entire feeding cycle for all animals
+        :return:
+        """
         self.grow_fodder()
         self.feed_herbivores()
         self.feed_carnivores()
 
     def procreation_herbivores(self):
+        """
+
+        :return:
+        """
         herb_offspring = []
         num_adult_herbs = len(self.herbivores)
 
@@ -74,14 +113,26 @@ class Cell:
         self.herbivores.extend(herb_offspring)
 
     def aging_animals(self):
+        """
+
+        :return:
+        """
         for herbs in self.herbivores:
             herbs.update_age()
 
     def animals_yearly_weight_loss(self):
+        """
+
+        :return:
+        """
         for herbs in self.herbivores:
             herbs.yearly_weight_loss()
 
     def animals_die(self):
+        """
+
+        :return:
+        """
         dead_herbivores = []
         for herb in self.herbivores:
             if herb.death():
@@ -91,44 +142,88 @@ class Cell:
         return dead_herbivores
 
     def get_num_animals(self):
+        """
+
+        :return:
+        """
         return len(self.herbivores)
 
     def get_remaining_fodder(self):
+        """
+        Returns the amount of fodder left in a cell.
+        :return:
+        """
         return self.fodder
 
     def migration(self):
+        """
+
+        :return:
+        """
         pass
 
 
 class Water(Cell):
+    """
+
+    """
     def __init__(self):
+        """
+
+        """
         pass
 
 
 class Desert(Cell):
+    """
+
+    """
     def __init__(self):
+        """
+
+        """
         pass
 
 
 class Lowland(Cell):
+    """
+
+    """
     parameters = {'f_max': 800.0}
 
     def __init__(self):
+        """
+
+        """
         super().__init__()
         self.fodder = self.parameters['f_max']
 
     def grow_fodder(self):
+        """
+
+        :return:
+        """
         self.fodder = self.parameters['f_max']
 
 
 class Highland(Cell):
+    """
+
+    """
     parameters = {'f_max': 300.0}
 
     def __init__(self):
+        """
+
+        """
         super().__init__()
         self.fodder = self.parameters['f_max']
 
     def grow_fodder(self):
+        """
+
+        :return:
+        """
         self.fodder = self.parameters['f_max']
 
 
@@ -161,4 +256,5 @@ if __name__ == "__main__":
             c.animals_die()
         print(c.get_num_animals())
 
-    #print(h1.age)
+    print(h1.age)
+    print(h1.weight)
