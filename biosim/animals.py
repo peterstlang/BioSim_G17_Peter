@@ -125,11 +125,9 @@ class Animal:
         :param num_animals:
         :return:
         """
-        if num_animals < 2:
-            return False
         p = self.parameters
         rand_num = np.random.random()
-        prob_birth = np.min(1, p['gamma'] * self.fitness * (num_animals - 1))
+        prob_birth = np.min([1, p['gamma'] * self.fitness * (num_animals - 1)])
         if self.weight < p['zeta'] * (p['w_birth'] + p['sigma_birth']):
             return False
         else:
