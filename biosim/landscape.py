@@ -254,7 +254,8 @@ if __name__ == "__main__":
             c.aging_animals()
             c.animals_yearly_weight_loss()
             c.animals_die()
-        print(c.get_num_animals())
+        #print(c.get_num_animals())
+        #print(h1.weight)
 
-    print(h1.age)
-    print(h1.weight)
+    #print(h1.age)
+    #print(h1.weight)

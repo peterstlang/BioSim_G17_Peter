@@ -45,7 +45,7 @@ class Animal:
             raise TypeError('age must be of type int')
 
         if age < 0:
-            raise TypeError('age must be a positive integer')
+            raise ValueError('age must be a positive integer')
 
         if weight is not None:
             if not isinstance(weight, (float, int)):
@@ -78,10 +78,13 @@ class Animal:
 
         :return:
         """
-        p = self.parameters
-        fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-            self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
-        return fit
+        if self.weight == 0:
+            self.fitness = 0
+        else:
+            p = self.parameters
+            fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
+                self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+            return fit
 
     def recalculate_fitness(self):
         """
