@@ -19,6 +19,10 @@ class Cell:
 
     @classmethod
     def set_parameters(cls, parameters):
+
+        if not isinstance(parameters, dict):
+            raise TypeError('parameters must be of type dict')
+
         cls.parameters.update(parameters)
 
     def __init__(self):
@@ -28,10 +32,10 @@ class Cell:
     def grow_fodder(self):
         pass
 
-    def randomise_herb_list(self):
-        our_list = self.herbivores
-        np.random.shuffle(our_list)
-        return our_list
+    # def randomise_herb_list(self):
+    #    our_list = self.herbivores
+    #    np.random.shuffle(our_list)
+    #    return our_list
 
     def place_animals(self, list_animals):
         if not isinstance(list_animals, list):
@@ -45,9 +49,9 @@ class Cell:
         animal_to_remove.remove(animal)
 
     def feed_herbivores(self):
-        random_herb_list = self.randomise_herb_list()
+        np.random.shuffle(self.herbivores)
 
-        for herb in random_herb_list:
+        for herb in self.herbivores:
             food_available = self.fodder
             food_eaten = herb.eat(food_available)
             self.fodder -= food_eaten
@@ -134,25 +138,32 @@ class Highland(Cell):
 
 
 if __name__ == "__main__":
-    #c = Lowland()
-    #h1 = Herbivore()
-    #h2 = Herbivore()
-    #h3 = Herbivore()
-    #h4 = Herbivore()
-    #h5 = Herbivore()
-    #h_list = [h1, h2, h3, h4, h5]
-    #c.place_animals(h_list)
+    c = Lowland()
+    h1 = Herbivore()
+    h2 = Herbivore()
+    h3 = Herbivore()
+    h4 = Herbivore()
+    h5 = Herbivore()
+    h6 = Herbivore()
+    h7 = Herbivore()
+    h8 = Herbivore()
+    h_list = [h1, h2, h3, h4, h5, h6, h7, h8]
+    c.place_animals(h_list)
     #print(c.get_num_animals())
-    #print(c.get_remaining_fodder())
-    #for i in range(50):
-    #    c.feed_animals()
-    #    c.procreation_herbivores()
-    #    c.aging_animals()
-    #    c.animals_yearly_weight_loss()
-    #    c.animals_die()
-
+    #c.animals_die()
     #print(c.get_num_animals())
-    #print(c.get_remaining_fodder())
+    # print(c.get_remaining_fodder())
+    # c.feed_herbivores()
+    # print(c.get_remaining_fodder())
+    # print(c.get_num_animals())
+    # print(c.get_remaining_fodder())
+    for j in range(10):
+        for i in range(200):
+            c.feed_animals()
+            c.procreation_herbivores()
+            c.aging_animals()
+            c.animals_yearly_weight_loss()
+            c.animals_die()
+        print(c.get_num_animals())
 
-
-    # print(h1.age)
+    #print(h1.age)
