@@ -68,9 +68,10 @@ class TestAnimal:
         with pytest.raises(ValueError):
             h = Herbivore(1, -1)
 
-    def test_herbivore_age(self):
-        h = Herbivore()
-        assert h.age == 0
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_herbivore_age(self, animal_class):
+        a = animal_class()
+        assert a.age == 0
 
     def test_update_age(self):
         h = Herbivore()
