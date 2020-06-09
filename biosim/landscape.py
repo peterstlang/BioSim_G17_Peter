@@ -11,6 +11,7 @@ from biosim.animals import Animal, Herbivore, Carnivore
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class Cell:
     """
     cell superclass
@@ -56,6 +57,7 @@ class Cell:
 
         for animal in list_animals:
             self.herbivores.append(animal)
+            # Her må jeg finne en løsning for carnivores
 
     def remove_animals(self, animal):
         """
@@ -63,6 +65,7 @@ class Cell:
         :param animal:
         :return:
         """
+        # Må få carnivores inn hit også
         animal_to_remove = self.herbivores
         animal_to_remove.remove(animal)
 
@@ -99,6 +102,8 @@ class Cell:
 
         :return:
         """
+        # ønsker å bruke denne metoden for begge arter.
+        # Må finne en god løsning for dette.
         herb_offspring = []
         num_adult_herbs = len(self.herbivores)
 
@@ -120,6 +125,9 @@ class Cell:
         for herbs in self.herbivores:
             herbs.update_age()
 
+        for carns in self.carnivores:
+            carns.update_age()
+
     def animals_yearly_weight_loss(self):
         """
 
@@ -127,6 +135,9 @@ class Cell:
         """
         for herbs in self.herbivores:
             herbs.yearly_weight_loss()
+
+        for carns in self.carnivores:
+            carns.yearly_weight_loss()
 
     def animals_die(self):
         """
@@ -146,7 +157,7 @@ class Cell:
 
         :return:
         """
-        return len(self.herbivores)
+        return len(self.herbivores) + len(self.carnivores)
 
     def get_remaining_fodder(self):
         """
@@ -167,6 +178,7 @@ class Water(Cell):
     """
 
     """
+
     def __init__(self):
         """
 
@@ -178,6 +190,7 @@ class Desert(Cell):
     """
 
     """
+
     def __init__(self):
         """
 
@@ -235,9 +248,9 @@ if __name__ == "__main__":
         anims.append(Herbivore(5, 20))
 
     c.place_animals(anims)
-    #print(c.get_num_animals())
-    #c.animals_die()
-    #print(c.get_num_animals())
+    # print(c.get_num_animals())
+    # c.animals_die()
+    # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
     # c.feed_herbivores()
     # print(c.get_remaining_fodder())
@@ -256,7 +269,7 @@ if __name__ == "__main__":
         plt.plot(num_animals)
 
     plt.show()
-        #print(h1.weight)
+    # print(h1.weight)
 
-    #print(h1.age)
-    #print(h1.weight)
+    # print(h1.age)
+    # print(h1.weight)
