@@ -9,7 +9,7 @@ __email__ = 'pelangda@nmbu.no'
 
 from biosim.animals import Animal, Herbivore, Carnivore
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class Cell:
     """
@@ -229,16 +229,12 @@ class Highland(Cell):
 
 if __name__ == "__main__":
     c = Lowland()
-    h1 = Herbivore()
-    h2 = Herbivore()
-    h3 = Herbivore()
-    h4 = Herbivore()
-    h5 = Herbivore()
-    h6 = Herbivore()
-    h7 = Herbivore()
-    h8 = Herbivore()
-    h_list = [h1, h2, h3, h4, h5, h6, h7, h8]
-    c.place_animals(h_list)
+
+    anims = list()
+    for i in range(50):
+        anims.append(Herbivore(5, 20))
+
+    c.place_animals(anims)
     #print(c.get_num_animals())
     #c.animals_die()
     #print(c.get_num_animals())
@@ -247,14 +243,19 @@ if __name__ == "__main__":
     # print(c.get_remaining_fodder())
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
+    num_animals = []
     for j in range(10):
-        for i in range(200):
+        for i in range(250):
             c.feed_animals()
             c.procreation_herbivores()
             c.aging_animals()
             c.animals_yearly_weight_loss()
             c.animals_die()
-        #print(c.get_num_animals())
+            num_animals.append(c.get_num_animals())
+        print(c.get_num_animals())
+        plt.plot(num_animals)
+
+    plt.show()
         #print(h1.weight)
 
     #print(h1.age)
