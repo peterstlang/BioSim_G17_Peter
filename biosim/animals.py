@@ -41,7 +41,7 @@ class Animal:
         :param weight:
         """
         # need some more additions but will add at a later point
-        if age != int(age):
+        if not isinstance(age, int):
             raise TypeError('age must be of type int')
 
         if age < 0:
