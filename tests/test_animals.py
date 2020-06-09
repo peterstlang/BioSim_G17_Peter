@@ -97,3 +97,13 @@ class TestAnimal:
         h = Herbivore(1, 7)
         h.eat(food_available)
         assert h.weight > 7
+
+    # This does not work, have to ask
+    #def test_kill_herb_is_herb_sorted(self):
+    #    c1 = Carnivore()
+    #    h1 = Herbivore(5, 10)
+    #    h2 = Herbivore(3, 5)
+    #    h3 = Herbivore(10, 20)
+    #    h_list = [h1, h2, h3]
+    #    c1.kill_herb(h_list)
+    #    assert h_list == sorted(h_list)
