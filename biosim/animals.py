@@ -8,6 +8,7 @@ __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
 import numpy as np
+import operator
 
 
 class Animal:
@@ -83,7 +84,7 @@ class Animal:
         else:
             p = self.parameters
             fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-                self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+                  self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
             return fit
 
     def recalculate_fitness(self):
@@ -139,12 +140,12 @@ class Animal:
         :return:
         """
         p = self.parameters
-        rand_num = np.random.random()
+        random_num = np.random.random()
         prob_birth = np.min([1, p['gamma'] * self.fitness * (num_animals - 1)])
         if self.weight < p['zeta'] * (p['w_birth'] + p['sigma_birth']):
             return False
         else:
-            return rand_num < prob_birth
+            return random_num < prob_birth
 
     def yearly_weight_loss(self):
         """
@@ -209,5 +210,14 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
-    def kill_herb(self):
-        pass
+    def kill_herb(self, herbivores):
+        random_num = np.random.random()
+        herb_by_fit = sorted(herbivores, key=operator.attrgetter("fitness"))
+        for ele in herb_by_fit:
+            if self.fitness <= ele.fitness:
+                return False
+            elif 0 < (self.fitness - ele.fitness) < self.parameters['DeltaPhiMax']:
+                return ((self.fitness - ele.fitness)
+                        / self.parameters['DeltaPhiMax']) > random_num
+            else:
+                return True
