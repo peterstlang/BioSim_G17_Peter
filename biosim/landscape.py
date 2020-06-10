@@ -15,7 +15,8 @@ import matplotlib.pyplot as plt
 
 class Cell:
     """
-    cell superclass
+    Cell superclass.
+    This is where animals will reside and the yearly cycle will occur
     """
     parameters = {}
 
@@ -89,7 +90,13 @@ class Cell:
         """
         sorted(self.carnivores, key=operator.attrgetter("fitness"))
 
-        #for carn in self.carnivores:
+
+        for carn in self.carnivores:
+            food_available = herb_weight
+            food_eaten = carn.eat(food_available)
+
+
+        # for carn in self.carnivores:
         #    food_available =
 
     def feed_animals(self):
@@ -180,7 +187,7 @@ class Cell:
 
 class Water(Cell):
     """
-
+    Water subclass
     """
 
     def __init__(self):
@@ -192,7 +199,7 @@ class Water(Cell):
 
 class Desert(Cell):
     """
-
+    Desert subclass
     """
 
     def __init__(self):
@@ -204,7 +211,7 @@ class Desert(Cell):
 
 class Lowland(Cell):
     """
-
+    Lowland subclass
     """
     parameters = {'f_max': 800.0}
 
@@ -225,7 +232,7 @@ class Lowland(Cell):
 
 class Highland(Cell):
     """
-
+    Highland subclass
     """
     parameters = {'f_max': 300.0}
 
@@ -246,13 +253,13 @@ class Highland(Cell):
 
 if __name__ == "__main__":
 
-    #c = Lowland()
+    c = Lowland()
 
-    #anims = list()
-    #for i in range(50):
-    #    anims.append(Herbivore(5, 20))
+    anims = list()
+    for i in range(10):
+        anims.append(Herbivore(5, 20))
 
-    #c.place_animals(anims)
+    c.place_animals(anims)
     # print(c.get_num_animals())
     # c.animals_die()
     # print(c.get_num_animals())
@@ -261,21 +268,20 @@ if __name__ == "__main__":
     # print(c.get_remaining_fodder())
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
-    #num_animals = []
-    #for j in range(10):
-    #    for i in range(250):
-    #        c.feed_animals()
-    #        c.procreation_herbivores()
-    #        c.aging_animals()
-    #        c.animals_yearly_weight_loss()
-    #        c.animals_die()
-    #        num_animals.append(c.get_num_animals())
-    #    print(c.get_num_animals())
-    #    plt.plot(num_animals)
+    num_animals = []
+    for j in range(10):
+        for i in range(250):
+            c.feed_animals()
+            c.procreation_herbivores()
+            c.aging_animals()
+            c.animals_yearly_weight_loss()
+            c.animals_die()
+            num_animals.append(c.get_num_animals())
+        print(c.get_num_animals())
+    plt.plot(num_animals)
 
-    #plt.show()
+    plt.show()
     # print(h1.weight)
 
     # print(h1.age)
     # print(h1.weight)
-

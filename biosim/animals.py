@@ -210,11 +210,15 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
+
+
     def kill_herb(self, herbivores):
         random_num = np.random.random()
         herb_by_fit = sorted(herbivores, key=operator.attrgetter("fitness"))
+
         for ele in herb_by_fit:
             if self.fitness <= ele.fitness:
+
                 return False
             elif 0 < (self.fitness - ele.fitness) < self.parameters['DeltaPhiMax']:
                 return ((self.fitness - ele.fitness)
