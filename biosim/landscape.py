@@ -8,7 +8,7 @@ __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 import numpy as np
 
-np.random.seed(1)
+#np.random.seed(16)
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
