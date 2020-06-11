@@ -78,7 +78,7 @@ class Animal:
 
         :return:
         """
-        if self.weight == 0:
+        if self.weight <= 0:
             self.fitness = 0
         else:
             p = self.parameters
@@ -130,7 +130,9 @@ class Animal:
         else:
             food_eaten = self.parameters['F']
         self.weight += self.parameters['beta'] * food_eaten
+        # print('before: ', self.fitness)
         self.recalculate_fitness()
+        # print('after: ', self.fitness)
         return food_eaten
 
     def give_birth(self, num_animals):
@@ -220,11 +222,15 @@ class Carnivore(Animal):
         eaten_amount = 0
         for herb in sorted_herb_list:
             if self.will_kill_herb(herb):
-                eaten_amount += herb.weight
-                self.weight += self.parameters['beta'] * herb.weight
+                eaten = min(50 - eaten_amount, herb.weight)
+                self.weight += self.parameters['beta'] * eaten
+                eaten_amount += eaten
+                # print(' carn before: ', self.fitness)
                 self.recalculate_fitness()
+                # print('carn after: ', self.fitness)
                 dead_herbs.append(herb)
             if eaten_amount >= self.parameters['F']:
+                # print('Does this break ever')
                 break
         return dead_herbs
 
@@ -238,11 +244,6 @@ class Carnivore(Animal):
         if self.fitness <= herb.fitness:
             return False
         elif 0 < (self.fitness - herb.fitness) < self.parameters['DeltaPhiMax']:
-            return ((self.fitness - herb.fitness)
-                    / self.parameters['DeltaPhiMax']) > random_num
+            return ((self.fitness - herb.fitness) / self.parameters['DeltaPhiMax']) > random_num
         else:
             return True
-
-
-
-

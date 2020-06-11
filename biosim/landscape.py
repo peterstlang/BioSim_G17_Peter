@@ -6,12 +6,13 @@
 
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
+
 import numpy as np
+
 np.random.seed(2)
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-
 
 
 class Cell:
@@ -91,16 +92,18 @@ class Cell:
         """
         sorted(self.carnivores, key=operator.attrgetter("fitness"), reverse=True)
         sorted(self.herbivores, key=operator.attrgetter("fitness"))
+        carns_num_eating = 0
 
         for carn in self.carnivores:
             dead_herbs = carn.eat_a_herb(self.herbivores)
+            if len(dead_herbs) >= 1:
+                carns_num_eating += 1
             surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
             self.herbivores = surviving_herbs
             sorted(self.herbivores, key=operator.attrgetter("fitness"))
-
+        print( carns_num_eating, ' out of ', len(self.carnivores), ' ate this year' )
 
             # Finne en annen måte å oppdatere self.herbivores
-
 
     def feed_animals(self):
         """
@@ -284,6 +287,7 @@ if __name__ == "__main__":
         carns.append(Carnivore(5, 20))
 
     c.place_animals(herbs)
+    c.place_animals(carns)
     # print(c.get_num_animals())
     # c.animals_die()
     # print(c.get_num_animals())
@@ -293,22 +297,19 @@ if __name__ == "__main__":
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
     num_animals = []
+    fitness_carn_avg = []
+    fitness_herb_avg = []
 
     for i in range(250):
-        if i == 50:
-            c.place_animals(carns)
         c.feed_animals()
         c.procreation_animals()
         c.aging_animals()
         c.animals_yearly_weight_loss()
         c.animals_die()
-
         num_animals.append(c.get_num_animals())
         print('herbivores, carnivores: ', c.get_num_animals())
-    #plt.plot(num_animals)
+    # plt.figure()
+    # plt.plot(fitness_herb_avg, fitness_carn_avg,'o' )
+    #
+    # plt.show()
 
-    #plt.show()
-    # print(h1.weight)
-
-    # print(h1.age)
-    # print(h1.weight)
