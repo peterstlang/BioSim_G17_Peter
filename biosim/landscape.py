@@ -7,11 +7,11 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 import numpy as np
-np.random.seed(2)
+
+#np.random.seed(2)
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-
 
 
 class Cell:
@@ -98,9 +98,7 @@ class Cell:
             self.herbivores = surviving_herbs
             sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
-
             # Finne en annen måte å oppdatere self.herbivores
-
 
     def feed_animals(self):
         """
@@ -305,10 +303,10 @@ if __name__ == "__main__":
 
         num_animals.append(c.get_num_animals())
         print('herbivores, carnivores: ', c.get_num_animals())
-    #plt.plot(num_animals)
+# plt.plot(num_animals)
 
-    #plt.show()
-    # print(h1.weight)
+# plt.show()
+# print(h1.weight)
 
-    # print(h1.age)
-    # print(h1.weight)
+# print(h1.age)
+# print(h1.weight)
