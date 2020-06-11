@@ -125,13 +125,9 @@ class Animal:
         :param food_available:
         :return:
         """
-        if food_available < self.parameters['F']:
-            food_eaten = food_available
-        else:
-            food_eaten = self.parameters['F']
-        self.weight += self.parameters['beta'] * food_eaten
+        self.weight += self.parameters['beta'] * food_available
         self.recalculate_fitness()
-        return food_eaten
+        return food_available
 
     def give_birth(self, num_animals):
         """

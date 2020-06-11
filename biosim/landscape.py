@@ -80,9 +80,13 @@ class Cell:
         np.random.shuffle(self.herbivores)
 
         for herb in self.herbivores:
-            food_available = self.fodder
-            food_eaten = herb.eat(food_available)
-            self.fodder -= food_eaten
+            appetite = herb.parameters['F']
+            if appetite <= self.fodder:
+                herb.eat(appetite)
+                self.fodder -= appetite
+            elif 0 < self.fodder < appetite:
+                herb.eat(self.fodder)
+                self.fodder = 0
 
     def feed_carnivores(self):
         """
@@ -92,21 +96,11 @@ class Cell:
         sorted(self.carnivores, key=operator.attrgetter("fitness"), reverse=True)
         sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
-        #for carn in self.carnivores:
-        #    dead_herbs = carn.eat_a_herb(self.herbivores)
-        #    surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
-        #    self.herbivores = surviving_herbs
-        #    sorted(self.herbivores, key=operator.attrgetter("fitness"))
         for carn in self.carnivores:
-            surviving_herbs = []
-            for herb in self.herbivores:
-                food_available = herb.weight
-                if carn.will_kill_herb(herb):
-                    carn.eat(food_available)
-                else:
-                    surviving_herbs.append(herb)
+            dead_herbs = carn.eat_a_herb(self.herbivores)
+            surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
+            self.herbivores = surviving_herbs
             sorted(self.herbivores, key=operator.attrgetter("fitness"))
-
 
             # Finne en annen måte å oppdatere self.herbivores
 
@@ -117,7 +111,7 @@ class Cell:
         """
         self.grow_fodder()
         self.feed_herbivores()
-        self.feed_carnivores()
+        #self.feed_carnivores()
 
     def procreation_animals(self):
         """
