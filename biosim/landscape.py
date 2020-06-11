@@ -8,7 +8,7 @@ __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 import numpy as np
 
-#np.random.seed(2)
+#np.random.seed(1)
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
@@ -97,10 +97,25 @@ class Cell:
         sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
         for carn in self.carnivores:
-            dead_herbs = carn.eat_a_herb(self.herbivores)
-            surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
-            self.herbivores = surviving_herbs
-            sorted(self.herbivores, key=operator.attrgetter("fitness"))
+            appetite = carn.parameters['F']
+            food_available = 0
+            survivors = []
+            for ind, herb in enumerate(self.herbivores):
+                if food_available >= appetite:
+                    survivors.extend(self.herbivores[ind:])
+                    break
+                elif carn.will_kill_herb(herb):
+                    wanted_amount = appetite - food_available
+                    if herb.weight <= wanted_amount:
+                        food_available += herb.weight
+                    elif herb.weight > wanted_amount:
+                        food_available += wanted_amount
+                else:
+                    survivors.append(herb)
+                sorted(self.herbivores, key=operator.attrgetter("fitness"))
+            carn.eat(food_available)
+            self.herbivores = survivors
+
 
             # Finne en annen måte å oppdatere self.herbivores
 
@@ -111,7 +126,7 @@ class Cell:
         """
         self.grow_fodder()
         self.feed_herbivores()
-        #self.feed_carnivores()
+        self.feed_carnivores()
 
     def procreation_animals(self):
         """
