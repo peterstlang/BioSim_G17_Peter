@@ -6,11 +6,12 @@
 
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
-
-from biosim.animals import Animal, Herbivore, Carnivore
 import numpy as np
+np.random.seed(2)
+from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
+
 
 
 class Cell:
@@ -292,16 +293,17 @@ if __name__ == "__main__":
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
     num_animals = []
-    for j in range(10):
-        for i in range(250):
-            if i == 50:
-                c.place_animals(carns)
-            c.feed_animals()
-            c.procreation_animals()
-            c.aging_animals()
-            c.animals_yearly_weight_loss()
-            c.animals_die()
-            num_animals.append(c.get_num_animals())
+
+    for i in range(250):
+        if i == 50:
+            c.place_animals(carns)
+        c.feed_animals()
+        c.procreation_animals()
+        c.aging_animals()
+        c.animals_yearly_weight_loss()
+        c.animals_die()
+
+        num_animals.append(c.get_num_animals())
         print('herbivores, carnivores: ', c.get_num_animals())
     #plt.plot(num_animals)
 
