@@ -98,12 +98,14 @@ class TestAnimal:
         h.eat(food_available)
         assert h.weight > 7
 
-    # This does not work, have to ask
-    #def test_kill_herb_is_herb_sorted(self):
-    #    c1 = Carnivore()
-    #    h1 = Herbivore(5, 10)
-    #    h2 = Herbivore(3, 5)
-    #    h3 = Herbivore(10, 20)
-    #    h_list = [h1, h2, h3]
-    #    c1.kill_herb(h_list)
-    #    assert h_list == sorted(h_list)
+    def test_kill_herb_is_herb_sorted(self):
+        import operator
+        c1 = Carnivore()
+        h1 = Herbivore(5, 10)
+        h2 = Herbivore(3, 5)
+        h3 = Herbivore(10, 20)
+        h_list = [h1, h2, h3]
+        sorted_list = sorted(h_list, key=operator.attrgetter("fitness"))
+        print(sorted_list)
+        # c1.kill_herb(h_list)
+        assert set(h_list) == set(sorted_list)

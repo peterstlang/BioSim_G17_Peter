@@ -13,12 +13,10 @@ from biosim.landscape import Cell, Lowland, Highland, Desert, Water
 class TestCell:
 
     def test_constructor(self):
-        c = Cell()
         l_l = Lowland()
         h = Highland()
         d = Desert()
         w = Water()
-        assert isinstance(c, Cell)
         assert isinstance(l_l, Lowland)
         assert isinstance(h, Highland)
         assert isinstance(d, Desert)
