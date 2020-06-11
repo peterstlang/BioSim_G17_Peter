@@ -210,23 +210,23 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
-    def eat_a_herb(self, sorted_herb_list):
-        """
+    #def eat_a_herb(self, sorted_herb_list):
+    #    """
 
-        :param sorted_herb_list:
-        :return:
-        """
-        dead_herbs = []
-        eaten_amount = 0
-        for herb in sorted_herb_list:
-            if self.will_kill_herb(herb):
-                eaten_amount += herb.weight
-                self.weight += self.parameters['beta'] * herb.weight
-                self.recalculate_fitness()
-                dead_herbs.append(herb)
-            if eaten_amount >= self.parameters['F']:
-                break
-        return dead_herbs
+    #    :param sorted_herb_list:
+    #    :return:
+    #    """
+    #    dead_herbs = []
+    #    eaten_amount = 0
+    #    for herb in sorted_herb_list:
+    #        if self.will_kill_herb(herb):
+    #            eaten_amount += herb.weight
+    #            self.weight += self.parameters['beta'] * herb.weight
+    #            self.recalculate_fitness()
+    #            dead_herbs.append(herb)
+    #        if eaten_amount >= self.parameters['F']:
+    #            break
+    #    return dead_herbs
 
     def will_kill_herb(self, herb):
         """
@@ -238,8 +238,7 @@ class Carnivore(Animal):
         if self.fitness <= herb.fitness:
             return False
         elif 0 < (self.fitness - herb.fitness) < self.parameters['DeltaPhiMax']:
-            return ((self.fitness - herb.fitness)
-                    / self.parameters['DeltaPhiMax']) > random_num
+            return ((self.fitness - herb.fitness) / self.parameters['DeltaPhiMax']) > random_num
         else:
             return True
 

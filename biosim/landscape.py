@@ -92,11 +92,21 @@ class Cell:
         sorted(self.carnivores, key=operator.attrgetter("fitness"), reverse=True)
         sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
+        #for carn in self.carnivores:
+        #    dead_herbs = carn.eat_a_herb(self.herbivores)
+        #    surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
+        #    self.herbivores = surviving_herbs
+        #    sorted(self.herbivores, key=operator.attrgetter("fitness"))
         for carn in self.carnivores:
-            dead_herbs = carn.eat_a_herb(self.herbivores)
-            surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
-            self.herbivores = surviving_herbs
+            surviving_herbs = []
+            for herb in self.herbivores:
+                food_available = herb.weight
+                if carn.will_kill_herb(herb):
+                    carn.eat(food_available)
+                else:
+                    surviving_herbs.append(herb)
             sorted(self.herbivores, key=operator.attrgetter("fitness"))
+
 
             # Finne en annen måte å oppdatere self.herbivores
 
