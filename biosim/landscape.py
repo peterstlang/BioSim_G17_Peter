@@ -58,8 +58,10 @@ class Cell:
             raise TypeError('list_animals myst be type list')
 
         for animal in list_animals:
-            self.herbivores.append(animal)
-            # Her må jeg finne en løsning for carnivores
+            if animal.__class__.__name__ == 'Herbivore':
+                self.herbivores.append(animal)
+            if animal.__class__.__name__ == 'Carnivore':
+                self.carnivores.append(animal)
 
     def remove_animals(self, animal):
         """
@@ -67,9 +69,7 @@ class Cell:
         :param animal:
         :return:
         """
-        # Må få carnivores inn hit også
-        animal_to_remove = self.herbivores
-        animal_to_remove.remove(animal)
+        pass
 
     def feed_herbivores(self):
         """
@@ -88,16 +88,18 @@ class Cell:
 
         :return:
         """
-        sorted(self.carnivores, key=operator.attrgetter("fitness"))
-
+        sorted(self.carnivores, key=operator.attrgetter("fitness"), reverse=True)
+        sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
         for carn in self.carnivores:
-            food_available = herb_weight
-            food_eaten = carn.eat(food_available)
+            dead_herbs = carn.eat_a_herb(self.herbivores)
+            surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
+            self.herbivores = surviving_herbs
+            sorted(self.herbivores, key=operator.attrgetter("fitness"))
 
 
-        # for carn in self.carnivores:
-        #    food_available =
+            # Finne en annen måte å oppdatere self.herbivores
+
 
     def feed_animals(self):
         """
@@ -108,7 +110,7 @@ class Cell:
         self.feed_herbivores()
         self.feed_carnivores()
 
-    def procreation_herbivores(self):
+    def procreation_animals(self):
         """
 
         :return:
@@ -127,6 +129,19 @@ class Cell:
                     herb.weight_after_birth(child.weight)
 
         self.herbivores.extend(herb_offspring)
+
+        carn_offspring = []
+        num_adult_carns = len(self.carnivores)
+
+        if num_adult_carns >= 2:
+            for carn in self.carnivores:
+                new_offspring = carn.give_birth(num_adult_carns)
+                if new_offspring:
+                    child = Carnivore()
+                    carn_offspring.append(child)
+                    carn.weight_after_birth(child.weight)
+
+        self.carnivores.extend(carn_offspring)
 
     def aging_animals(self):
         """
@@ -161,14 +176,20 @@ class Cell:
                 dead_herbivores.append(herb)
         for dead_herb in dead_herbivores:
             self.herbivores.remove(dead_herb)
-        return dead_herbivores
+
+        dead_carnivores = []
+        for carn in self.carnivores:
+            if carn.death():
+                dead_carnivores.append(carn)
+        for dead_carn in dead_carnivores:
+            self.carnivores.remove(dead_carn)
 
     def get_num_animals(self):
         """
 
         :return:
         """
-        return len(self.herbivores) + len(self.carnivores)
+        return len(self.herbivores), len(self.carnivores)
 
     def get_remaining_fodder(self):
         """
@@ -194,7 +215,7 @@ class Water(Cell):
         """
 
         """
-        pass
+        super().__init__()
 
 
 class Desert(Cell):
@@ -206,7 +227,7 @@ class Desert(Cell):
         """
 
         """
-        pass
+        super().__init__()
 
 
 class Lowland(Cell):
@@ -252,14 +273,16 @@ class Highland(Cell):
 
 
 if __name__ == "__main__":
-
     c = Lowland()
+    herbs = list()
+    for i in range(50):
+        herbs.append(Herbivore(5, 20))
 
-    anims = list()
-    for i in range(10):
-        anims.append(Herbivore(5, 20))
+    carns = list()
+    for i in range(20):
+        carns.append(Carnivore(5, 20))
 
-    c.place_animals(anims)
+    c.place_animals(herbs)
     # print(c.get_num_animals())
     # c.animals_die()
     # print(c.get_num_animals())
@@ -271,16 +294,18 @@ if __name__ == "__main__":
     num_animals = []
     for j in range(10):
         for i in range(250):
+            if i == 50:
+                c.place_animals(carns)
             c.feed_animals()
-            c.procreation_herbivores()
+            c.procreation_animals()
             c.aging_animals()
             c.animals_yearly_weight_loss()
             c.animals_die()
             num_animals.append(c.get_num_animals())
-        print(c.get_num_animals())
-    plt.plot(num_animals)
+        print('herbivores, carnivores: ', c.get_num_animals())
+    #plt.plot(num_animals)
 
-    plt.show()
+    #plt.show()
     # print(h1.weight)
 
     # print(h1.age)

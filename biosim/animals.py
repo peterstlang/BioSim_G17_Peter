@@ -8,7 +8,6 @@ __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
 import numpy as np
-import operator
 
 
 class Animal:
@@ -103,6 +102,7 @@ class Animal:
         :return: updated year
         """
         self.age += 1
+        self.recalculate_fitness()
 
     def will_move(self):
         """
@@ -210,18 +210,39 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
+    def eat_a_herb(self, sorted_herb_list):
+        """
 
+        :param sorted_herb_list:
+        :return:
+        """
+        dead_herbs = []
+        eaten_amount = 0
+        for herb in sorted_herb_list:
+            if self.will_kill_herb(herb):
+                eaten_amount += herb.weight
+                self.weight += self.parameters['beta'] * herb.weight
+                self.recalculate_fitness()
+                dead_herbs.append(herb)
+            if eaten_amount >= self.parameters['F']:
+                break
+        return dead_herbs
 
-    def kill_herb(self, herbivores):
+    def will_kill_herb(self, herb):
+        """
+
+        :param herb:
+        :return:
+        """
         random_num = np.random.random()
-        herb_by_fit = sorted(herbivores, key=operator.attrgetter("fitness"))
+        if self.fitness <= herb.fitness:
+            return False
+        elif 0 < (self.fitness - herb.fitness) < self.parameters['DeltaPhiMax']:
+            return ((self.fitness - herb.fitness)
+                    / self.parameters['DeltaPhiMax']) > random_num
+        else:
+            return True
 
-        for ele in herb_by_fit:
-            if self.fitness <= ele.fitness:
 
-                return False
-            elif 0 < (self.fitness - ele.fitness) < self.parameters['DeltaPhiMax']:
-                return ((self.fitness - ele.fitness)
-                        / self.parameters['DeltaPhiMax']) > random_num
-            else:
-                return True
+
+
