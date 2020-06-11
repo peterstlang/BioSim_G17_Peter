@@ -147,22 +147,22 @@ class Cell:
 
         :return:
         """
-        for herbs in self.herbivores:
-            herbs.update_age()
+        for herb in self.herbivores:
+            herb.update_age()
 
-        for carns in self.carnivores:
-            carns.update_age()
+        for carn in self.carnivores:
+            carn.update_age()
 
     def animals_yearly_weight_loss(self):
         """
 
         :return:
         """
-        for herbs in self.herbivores:
-            herbs.yearly_weight_loss()
+        for herb in self.herbivores:
+            herb.yearly_weight_loss()
 
-        for carns in self.carnivores:
-            carns.yearly_weight_loss()
+        for carn in self.carnivores:
+            carn.yearly_weight_loss()
 
     def animals_die(self):
         """
