@@ -242,3 +242,5 @@ class Carnivore(Animal):
                     / self.parameters['DeltaPhiMax']) > random_num
         else:
             return True
+
+#doing some debug
