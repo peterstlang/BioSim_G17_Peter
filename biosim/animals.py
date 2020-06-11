@@ -83,7 +83,7 @@ class Animal:
         else:
             p = self.parameters
             fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-                self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+                  self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
             return fit
 
     def recalculate_fitness(self):
