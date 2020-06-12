@@ -38,6 +38,7 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
+        pass
 
     def create_map(self, string_of_map):
         """WW
@@ -51,6 +52,7 @@ class BioSim:
         for i, row in enumerate(list_of_lists):
             for j, cell in enumerate(row):
                 cells_object_list_of_list.append(type_of_landscape[list_of_lists[i][j]])
+        pass
 
     def set_animal_parameters(self, species, params):
         """
@@ -58,6 +60,7 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
+        pass
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -65,6 +68,7 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        pass
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
@@ -74,24 +78,30 @@ class BioSim:
         :param img_years: years between visualizations saved to files (default: vis_years)
         Image files will be numbered consecutively.
         """
+        pass
 
     def add_population(self, population):
         """
         Add a population to the island
         :param population: List of dictionaries specifying population
         """
+        pass
 
     @property
     def year(self):
         """Last year simulated."""
+        pass
 
     @property
     def num_animals(self):
         """Total number of animals on island."""
+        pass
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
+        pass
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
+        pass
