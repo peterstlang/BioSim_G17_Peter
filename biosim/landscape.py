@@ -10,7 +10,7 @@ import numpy as np
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-#np.random.seed(1)
+#np.random.seed(60)
 
 
 class Cell:
@@ -69,7 +69,12 @@ class Cell:
         :param animal:
         :return:
         """
-        pass
+        for anim in animal:
+            if anim.__class__.__name__ == 'Herbivore':
+                self.herbivores.remove(anim)
+            if anim.__class__.__name__ == 'Carnivore':
+                self.carnivores.remove(anim)
+
 
     def feed_herbivores(self):
         """
@@ -88,16 +93,14 @@ class Cell:
 
         :return:
         """
-        sorted(self.carnivores, key=operator.attrgetter("fitness"), reverse=True)
-        sorted(self.herbivores, key=operator.attrgetter("fitness"))
+        self.carnivores.sort(key=operator.attrgetter("fitness"), reverse=True)
+        self.herbivores.sort(key=operator.attrgetter("fitness"))
 
         for carn in self.carnivores:
             dead_herbs = carn.eat_a_herb(self.herbivores)
             surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
             self.herbivores = surviving_herbs
-            sorted(self.herbivores, key=operator.attrgetter("fitness"))
-
-            # Finne en annen måte å oppdatere self.herbivores
+            self.herbivores.sort(key=operator.attrgetter("fitness"))
 
     def feed_animals(self):
         """
@@ -196,12 +199,18 @@ class Cell:
         """
         return self.fodder
 
-    def migration(self):
+    def migration(self, anim_list):
         """
+        This method takes an animal and calculates the probability for it
+        to move. If it decides to move it will pick one of the four
+        neighbouring cells at random and move
 
         :return:
         """
+        #for anim in anim_list:
+        #    if anim.will_move():
         pass
+
 
 
 class Water(Cell):
@@ -289,23 +298,23 @@ if __name__ == "__main__":
     # print(c.get_remaining_fodder())
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
-    #for k in range(10):
-    num_animals = []
-    for i in range(250):
-        if i == 50:
-            c.place_animals(carns)
-        c.feed_animals()
-        c.procreation_animals()
-        c.aging_animals()
-        c.animals_yearly_weight_loss()
-        c.animals_die()
-        num_animals.append(c.get_num_animals())
+    for k in range(10):
+        num_animals = []
+        for i in range(250):
+            if i == 50:
+                c.place_animals(carns)
+            c.feed_animals()
+            c.procreation_animals()
+            c.aging_animals()
+            c.animals_yearly_weight_loss()
+            c.animals_die()
+            num_animals.append(c.get_num_animals())
 
-    last_ele = num_animals[-1]
-    if last_ele[-1] == 0:
-        print('carnivores died out')
-    else:
-        print('herbivores, carnivores: ', c.get_num_animals())
+        last_ele = num_animals[-1]
+        if last_ele[-1] == 0:
+            print('carnivores died out')
+        else:
+            print('herbivores, carnivores: ', c.get_num_animals())
 # plt.plot(num_animals)
 
 # plt.show()
