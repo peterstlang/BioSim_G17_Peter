@@ -7,8 +7,8 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
-from biosim.animals import Animal, Herbivore, Carnvivore
-from biosim.landscape import Cell, Water, Lowland, Highland,
+from biosim.landscape import Cell, Water, Lowland, Highland, Desert
+from biosim.animals import Animal, Herbivore, Carnivore
 import numpy as np
 
 
@@ -18,12 +18,24 @@ class Island:
     """
     type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
 
-    def __init__(self, map):
+    def __init__(self, island_map_as_string):
+
         """
         The island class constructor
         :param map:
         """
-        map = np.array([map[1, -1]])
+        self.island = self.create_map(island_map_as_string)
+
 
     def annual_cycle(self):
         pass
+
+    def get_adjacent_cells(self, current_cell_coord):
+        """
+
+        :param current_cell_coord:
+        :return: a list of the 4 adjacent cells
+        """
+        pass
+
+
