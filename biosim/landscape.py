@@ -10,7 +10,7 @@ import numpy as np
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-#np.random.seed(25)
+#np.random.seed(1)
 
 
 class Cell:
@@ -289,8 +289,8 @@ if __name__ == "__main__":
     # print(c.get_remaining_fodder())
     # print(c.get_num_animals())
     # print(c.get_remaining_fodder())
+    #for k in range(10):
     num_animals = []
-
     for i in range(250):
         if i == 50:
             c.place_animals(carns)
@@ -299,8 +299,12 @@ if __name__ == "__main__":
         c.aging_animals()
         c.animals_yearly_weight_loss()
         c.animals_die()
-
         num_animals.append(c.get_num_animals())
+
+    last_ele = num_animals[-1]
+    if last_ele[-1] == 0:
+        print('carnivores died out')
+    else:
         print('herbivores, carnivores: ', c.get_num_animals())
 # plt.plot(num_animals)
 
