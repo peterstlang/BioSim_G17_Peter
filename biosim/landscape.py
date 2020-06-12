@@ -10,7 +10,7 @@ import numpy as np
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-#np.random.seed(60)
+#np.random.seed(1)
 
 
 class Cell:
@@ -280,27 +280,22 @@ class Highland(Cell):
 
 
 if __name__ == "__main__":
-    c = Lowland()
-    herbs = list()
-    for i in range(50):
-        herbs.append(Herbivore(5, 20))
-
-    carns = list()
-    for i in range(20):
-        carns.append(Carnivore(5, 20))
-
-    c.place_animals(herbs)
-    # print(c.get_num_animals())
-    # c.animals_die()
-    # print(c.get_num_animals())
-    # print(c.get_remaining_fodder())
-    # c.feed_herbivores()
-    # print(c.get_remaining_fodder())
-    # print(c.get_num_animals())
-    # print(c.get_remaining_fodder())
-    for k in range(10):
-        num_animals = []
-        for i in range(250):
+    # This code was written by Professor Hans
+    seeds = range(200, 240)
+    years = 250
+    mean_counts = np.zeros((len(seeds), 2))
+    for sn, seed in enumerate(seeds):
+        np.random.seed(seed)
+        c = Lowland()
+        herbs = list()
+        for i in range(50):
+            herbs.append(Herbivore(5, 20))
+        carns = list()
+        for i in range(20):
+            carns.append(Carnivore(5, 20))
+        c.place_animals(herbs)
+        num_animals = np.zeros((years, 2))
+        for i in range(years):
             if i == 50:
                 c.place_animals(carns)
             c.feed_animals()
@@ -308,17 +303,9 @@ if __name__ == "__main__":
             c.aging_animals()
             c.animals_yearly_weight_loss()
             c.animals_die()
-            num_animals.append(c.get_num_animals())
-
-        last_ele = num_animals[-1]
-        if last_ele[-1] == 0:
-            print('carnivores died out')
-        else:
-            print('herbivores, carnivores: ', c.get_num_animals())
-# plt.plot(num_animals)
-
-# plt.show()
-# print(h1.weight)
-
-# print(h1.age)
-# print(h1.weight)
+            num_animals[i, :] = c.get_num_animals()
+        mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
+        plt.plot(num_animals)
+    mean_counts = mean_counts[mean_counts[:, 0].argsort()]
+    print(mean_counts)
+    plt.show()
