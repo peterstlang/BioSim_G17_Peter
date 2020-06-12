@@ -41,18 +41,19 @@ class BioSim:
         pass
 
     def create_map(self, string_of_map):
-        """WW
-                    LL
-                    HH"""
-        type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
-        list_of_lists = [['W', 'W'],
-                         ['L', 'L'],
-                         ['H', 'H']]
-        cells_object_list_of_list = []
-        for i, row in enumerate(list_of_lists):
-            for j, cell in enumerate(row):
-                cells_object_list_of_list.append(type_of_landscape[list_of_lists[i][j]])
-        pass
+        #"""WW
+        #            LL
+        #            HH"""
+        #type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
+        #list_of_lists = [['W', 'W'],
+        #                 ['L', 'L'],
+        #                 ['H', 'H']]
+        #cells_object_list_of_list = []
+        #for i, row in enumerate(list_of_lists):
+        #    for j, cell in enumerate(row):
+        #        cells_object_list_of_list.append(type_of_landscape[list_of_lists[i][j]])
+        #pass
+        #map_of_cells = [list(cell) for cell in string_of_map.splitlines()]
 
     def set_animal_parameters(self, species, params):
         """
