@@ -73,14 +73,16 @@ class TestAnimal:
         a = animal_class()
         assert a.age == 0
 
-    def test_update_age(self):
-        h = Herbivore()
-        h.update_age()
-        assert h.age == 1
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_update_age(self, animal_class):
+        a = animal_class()
+        a.update_age()
+        assert a.age == 1
 
-    def test_birth_weight(self):
-        h = Herbivore()
-        assert h.weight >= 0
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_birth_weight(self, animal_class):
+        a = animal_class()
+        assert a.weight >= 0
 
     def test_yearly_weight_loss(self):
         h = Herbivore(age=1, weight=7)
