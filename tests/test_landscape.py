@@ -34,4 +34,26 @@ class TestCell:
         assert ll.fodder == 800
 
     def test_animals_placed(self):
+        ll = Lowland()
+        a_list = [Herbivore(), Carnivore()]
+        ll.place_animals(a_list)
+        assert len(ll.herbivores) == 1
+        assert len(ll.carnivores) == 1
+
+    def test_animal_is_birthed(self, mocker):
+        # mocker.patch('give_birth', return_value=True)
+        # h1 = Herbivore()
+        # h2 = Herbivore()
+        # h_list = [h1, h2]
+        # c = Lowland
+        # c.place_animals(h_list)
+        # c.procreation_animals()
+        # assert len(h_list) == 4
         pass
+
+    def test_feed_herbivores(self):
+        h_list = [Herbivore()]
+        ll = Lowland()
+        ll.place_animals(h_list)
+        ll.feed_herbivores()
+        assert ll.fodder == 790
