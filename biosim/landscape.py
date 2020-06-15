@@ -10,7 +10,9 @@ import numpy as np
 from biosim.animals import Animal, Herbivore, Carnivore
 import operator
 import matplotlib.pyplot as plt
-#np.random.seed(1)
+
+
+# np.random.seed(1)
 
 
 class Cell:
@@ -23,9 +25,8 @@ class Cell:
     @classmethod
     def set_parameters(cls, parameters):
         """
-
-        :param parameters:
-        :return:
+        Allows the user to set their own parameters
+        :param parameters: dict
         """
 
         if not isinstance(parameters, dict):
@@ -35,7 +36,7 @@ class Cell:
 
     def __init__(self):
         """
-
+        constructor for Cell superclass.
         """
         self.fodder = 0
         self.herbivores = []
@@ -50,9 +51,8 @@ class Cell:
 
     def place_animals(self, list_animals):
         """
-
-        :param list_animals:
-        :return:
+        Takes a list of animals and place them in the cell.
+        :param list_animals: list
         """
         if not isinstance(list_animals, list):
             raise TypeError('list_animals myst be type list')
@@ -63,23 +63,22 @@ class Cell:
             if animal.__class__.__name__ == 'Carnivore':
                 self.carnivores.append(animal)
 
-    def remove_animals(self, animal):
+    def remove_animals(self, animallist):
         """
 
-        :param animal:
+        :param animal: class instance
         :return:
         """
-        for anim in animal:
+        for anim in animallist:
             if anim.__class__.__name__ == 'Herbivore':
                 self.herbivores.remove(anim)
             if anim.__class__.__name__ == 'Carnivore':
                 self.carnivores.remove(anim)
 
-
     def feed_herbivores(self):
         """
-
-        :return:
+        Feeds Herbivores in the cell until their is no fodder, or hungry
+        herbivores left
         """
         np.random.shuffle(self.herbivores)
 
@@ -90,8 +89,9 @@ class Cell:
 
     def feed_carnivores(self):
         """
-
-        :return:
+        Feeds Carnivores in the cell until all carnivores have eaten
+        or there are no herbivores left. The fittest carnivores eat first and
+        they try to kill/eat the herbivores with the lowest fitness
         """
         self.carnivores.sort(key=operator.attrgetter("fitness"), reverse=True)
         self.herbivores.sort(key=operator.attrgetter("fitness"))
@@ -113,8 +113,8 @@ class Cell:
 
     def procreation_animals(self):
         """
-
-        :return:
+        This method will mate the animals and add the offspring
+        to the list of animals
         """
         # ønsker å bruke denne metoden for begge arter.
         # Må finne en god løsning for dette.
@@ -146,8 +146,7 @@ class Cell:
 
     def aging_animals(self):
         """
-
-        :return:
+        ages the animals in a cell
         """
         for herb in self.herbivores:
             herb.update_age()
@@ -157,8 +156,7 @@ class Cell:
 
     def animals_yearly_weight_loss(self):
         """
-
-        :return:
+        Updates the weight of the animals in a cell
         """
         for herb in self.herbivores:
             herb.yearly_weight_loss()
@@ -168,7 +166,8 @@ class Cell:
 
     def animals_die(self):
         """
-
+        Checks if any of the animals die or not.
+        If an animal dies it is removed from the respective list.
         :return:
         """
         dead_herbivores = []
@@ -187,8 +186,9 @@ class Cell:
 
     def get_num_animals(self):
         """
-
-        :return:
+        Gives the user a tuple. The left most values are the amount
+        of herbivores in a cell and the rightmost is carnivores.
+        :return: tuple
         """
         return len(self.herbivores), len(self.carnivores)
 
@@ -199,7 +199,7 @@ class Cell:
         """
         return self.fodder
 
-    def migration(self, anim_list):
+    def migration(self, adj_cells):
         """
         This method takes an animal and calculates the probability for it
         to move. If it decides to move it will pick one of the four
@@ -207,16 +207,31 @@ class Cell:
 
         :return:
         """
-        #for anim in anim_list:
-        #    if anim.will_move():
-        pass
 
+        anims_that_migrate = {}
+        anim_list = self.carnivores + self.herbivores
+        for anim in anim_list:
+            if anim.will_move() and not anim.animals_has_migrated:
+                destination_cell = np.random.choice(adj_cells)
+                print(destination_cell)
+                if destination_cell in anims_that_migrate.keys():
+                    anims_that_migrate[destination_cell].append(anim)
+                else:
+                    anims_that_migrate[destination_cell] = [anim]
+
+        for anim in anim_list:
+            anim.set_has_migrated(True)
+            # Do this using a fucntion in animal class
+
+        return anims_that_migrate
 
 
 class Water(Cell):
     """
     Water subclass
     """
+
+    habitable_cell = False
 
     def __init__(self):
         """
@@ -230,6 +245,8 @@ class Desert(Cell):
     Desert subclass
     """
 
+    habitable_cell = True
+
     def __init__(self):
         """
 
@@ -241,6 +258,7 @@ class Lowland(Cell):
     """
     Lowland subclass
     """
+    habitable_cell = True
     parameters = {'f_max': 800.0}
 
     def __init__(self):
@@ -262,6 +280,7 @@ class Highland(Cell):
     """
     Highland subclass
     """
+    habitable_cell = True
     parameters = {'f_max': 300.0}
 
     def __init__(self):
@@ -278,34 +297,33 @@ class Highland(Cell):
         """
         self.fodder = self.parameters['f_max']
 
-
-if __name__ == "__main__":
-    # This code was written by Professor Hans
-    seeds = range(200, 240)
-    years = 250
-    mean_counts = np.zeros((len(seeds), 2))
-    for sn, seed in enumerate(seeds):
-        np.random.seed(seed)
-        c = Lowland()
-        herbs = list()
-        for i in range(50):
-            herbs.append(Herbivore(5, 20))
-        carns = list()
-        for i in range(20):
-            carns.append(Carnivore(5, 20))
-        c.place_animals(herbs)
-        num_animals = np.zeros((years, 2))
-        for i in range(years):
-            if i == 50:
-                c.place_animals(carns)
-            c.feed_animals()
-            c.procreation_animals()
-            c.aging_animals()
-            c.animals_yearly_weight_loss()
-            c.animals_die()
-            num_animals[i, :] = c.get_num_animals()
-        mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
-        plt.plot(num_animals)
-    mean_counts = mean_counts[mean_counts[:, 0].argsort()]
-    print(mean_counts)
-    plt.show()
+# if __name__ == "__main__":
+# This code was written by Professor Hans
+#    seeds = range(200, 240)
+#    years = 250
+#    mean_counts = np.zeros((len(seeds), 2))
+#    for sn, seed in enumerate(seeds):
+#        np.random.seed(seed)
+#        c = Lowland()
+#        herbs = list()
+#        for i in range(50):
+#            herbs.append(Herbivore(5, 20))
+#        carns = list()
+#        for i in range(20):
+#            carns.append(Carnivore(5, 20))
+#        c.place_animals(herbs)
+#        num_animals = np.zeros((years, 2))
+#        for i in range(years):
+#            if i == 50:
+#                c.place_animals(carns)
+#            c.feed_animals()
+#            c.procreation_animals()
+#            c.aging_animals()
+#            c.animals_yearly_weight_loss()
+#            c.animals_die()
+#            num_animals[i, :] = c.get_num_animals()
+#        mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
+#        plt.plot(num_animals)
+#    mean_counts = mean_counts[mean_counts[:, 0].argsort()]
+#    print(mean_counts)
+#    plt.show()

@@ -30,17 +30,24 @@ class Island:
         self.island = self.create_map(island_map_as_string)
 
     def create_map(self, multi_line_string):
+        """
+
+        :param multi_line_string:
+        :return:
+        """
         # type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
 
         multi_line_string = multi_line_string.strip()
         list_of_lists = [list(cell) for cell in multi_line_string.splitlines()]
-        # print(list_of_lists)
+
         cells_object_list_of_list = []
         for i, row in enumerate(list_of_lists):
+            one_d_list = []
             for j, cell in enumerate(row):
-                cells_object_list_of_list.append(
-                    self.type_of_landscape[list_of_lists[i][j]])
+                one_d_list.append(self.type_of_landscape[list_of_lists[i][j]]())
+            cells_object_list_of_list.append(one_d_list)
 
+        # print(np.asarray(cells_object_list_of_list).shape)
         return cells_object_list_of_list
 
     def populate(self, population):
@@ -59,10 +66,40 @@ class Island:
         four_adj_cells = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
         return four_adj_cells
 
-        #list_adj_cell = []
-        #for cell in four_adj_cells:
-        #    for coord in cell:
-        #        list_adj_cell.append(coord)
+    def start_migration(self):
+        for row, rows_of_cell_obj in enumerate(self.island):
+            for col, cell in enumerate(rows_of_cell_obj):
+                for anim in cell.herbivores + cell.carnivores:
+                    anim.set_has_migrated(False)
+                    # anim.animals_has_migrated = False # Do it through a function in animal class later
+
+        for row, rows_of_cell_obj in enumerate(self.island):
+            # print(rows_of_cell_obj)
+            for col, cell in enumerate(rows_of_cell_obj):
+
+                if cell.habitable_cell:
+                    adjacent_cord = self.get_adjacent_cells((row, col))
+                    adjacent_cells = [self.island[row][col] for row, col in adjacent_cord]
+                    animals_dct = cell.migration(adjacent_cells)
+                    for migrating_cell, values in animals_dct.items():
+                        if values:
+                            migrating_cell.place_animals(values)
+                            cell.remove_animals(values)
+
+
+
+                    # gets a dictionary of [cell1: [], cell2[] )
+                    # cell1.add_immigrants()
+                    # cell.remove_animals()
+
+    #def animal_loc_after_migration(self, migrated_anims_dct):
+    #    relocated_animals = []
+
+    #    for cell in migrated_anims_dct.keys():
+    #        if cell.habitable_cell:
+    #            cell.values()
+
+
 
 
 
@@ -92,4 +129,11 @@ if __name__ == "__main__":
     WLLW
     WWWW""")
 
-    I.get_adjacent_cells((1, 1))
+    # print( np.asarray(I.island).shape)
+
+
+    I.island[1][1].herbivores = [Herbivore() for _ in range(50)]
+    print(len(I.island[1][1].herbivores))
+
+    I.start_migration()
+    print( len( I.island[1][1].herbivores ) )
