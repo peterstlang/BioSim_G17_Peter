@@ -183,8 +183,11 @@ class Animal:
             return prob_death > random_num
 
     def set_has_migrated(self, boolean):
-        self.animals_has_migrated = boolean
+        """
 
+        :param boolean: bool
+        """
+        self.animals_has_migrated = boolean
 
 
 class Herbivore(Animal):

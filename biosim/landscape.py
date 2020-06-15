@@ -213,7 +213,7 @@ class Cell:
         for anim in anim_list:
             if anim.will_move() and not anim.animals_has_migrated:
                 destination_cell = np.random.choice(adj_cells)
-                print(destination_cell)
+                # print(destination_cell)
                 if destination_cell in anims_that_migrate.keys():
                     anims_that_migrate[destination_cell].append(anim)
                 else:
@@ -221,7 +221,7 @@ class Cell:
 
         for anim in anim_list:
             anim.set_has_migrated(True)
-            # Do this using a fucntion in animal class
+            # spør om den her egt er riktig?
 
         return anims_that_migrate
 
