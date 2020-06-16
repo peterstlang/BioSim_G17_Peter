@@ -58,10 +58,17 @@ class Cell:
             raise TypeError('list_animals myst be type list')
 
         for animal in list_animals:
-            if animal.__class__.__name__ == 'Herbivore':
-                self.herbivores.append(animal)
-            if animal.__class__.__name__ == 'Carnivore':
-                self.carnivores.append(animal)
+
+            age = animal['age']
+            weight = animal['weight']
+            species = animal['species']
+
+            if species == 'Herbivore':
+                self.herbivores.append(Herbivore(age, weight))
+            elif species == 'Carnivore':
+                self.carnivores.append(Carnivore(age, weight))
+            else:
+                raise KeyError('must be either herbivore or carnivore')
 
     def remove_animals(self, animallist):
         """
@@ -297,33 +304,62 @@ class Highland(Cell):
         """
         self.fodder = self.parameters['f_max']
 
-# if __name__ == "__main__":
-# This code was written by Professor Hans
-#    seeds = range(200, 240)
-#    years = 250
-#    mean_counts = np.zeros((len(seeds), 2))
-#    for sn, seed in enumerate(seeds):
-#        np.random.seed(seed)
-#        c = Lowland()
-#        herbs = list()
-#        for i in range(50):
-#            herbs.append(Herbivore(5, 20))
-#        carns = list()
-#        for i in range(20):
-#            carns.append(Carnivore(5, 20))
-#        c.place_animals(herbs)
-#        num_animals = np.zeros((years, 2))
-#        for i in range(years):
-#            if i == 50:
-#                c.place_animals(carns)
-#            c.feed_animals()
-#            c.procreation_animals()
-#            c.aging_animals()
-#            c.animals_yearly_weight_loss()
-#            c.animals_die()
-#            num_animals[i, :] = c.get_num_animals()
-#        mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
-#        plt.plot(num_animals)
-#    mean_counts = mean_counts[mean_counts[:, 0].argsort()]
-#    print(mean_counts)
-#    plt.show()
+
+if __name__ == "__main__":
+    # This code was written by Professor Hans
+    #seeds = range(200, 205)
+    #years = 250
+    #mean_counts = np.zeros((len(seeds), 2))
+    #for sn, seed in enumerate(seeds):
+    #    np.random.seed(seed)
+    #    c = Lowland()
+    #    herbs = list()
+    #    for i in range(50):
+    #        herbs.append(Herbivore(5, 20))
+    #    carns = list()
+    #    for i in range(20):
+    #        carns.append(Carnivore(5, 20))
+    #    c.place_animals(herbs)
+    #    num_animals = np.zeros((years, 2))
+    #    for i in range(years):
+    #        if i == 50:
+    #            c.place_animals(carns)
+    #        c.feed_animals()
+    #        c.procreation_animals()
+    #        c.aging_animals()
+    #        c.animals_yearly_weight_loss()
+    #        c.animals_die()
+    #        num_animals[i, :] = c.get_num_animals()
+    #    mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
+    #    plt.plot(num_animals)
+    #mean_counts = mean_counts[mean_counts[:, 0].argsort()]
+    #print(mean_counts)
+    #plt.show()
+    listof = [{'species': 'Herbivore',
+               'age': 5,
+               'weight': 25}
+              for _ in range(150)]
+    l = Lowland()
+    print(l.fodder)
+    # place them in list
+    l.place_animals(listof)
+    # make them eat
+    l.feed_animals()
+    # for herb in l.herb_list:
+    #     print(herb.fitness(), end=',')
+
+    # make them reproduce
+    print("")
+    print(len(l.herbivores))
+    l.procreation_animals()
+    print(len(l.herbivores))
+
+    # make them die
+    l.animals_die()
+    print(len(l.herbivores))
+
+    # get older and continue the cycle for next year
+    l.aging_animals()
+    for anim in l.herbivores:
+        print(anim.age, end=',')
+

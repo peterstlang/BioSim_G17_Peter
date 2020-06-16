@@ -40,6 +40,15 @@ class Island:
         multi_line_string = multi_line_string.strip()
         list_of_lists = [list(cell) for cell in multi_line_string.splitlines()]
 
+        top_row = list_of_lists[0]
+        bottom_row = list_of_lists[-1]
+        left_col = [cellcol[0] for cellcol in list_of_lists]
+        right_col = [cellcol[-1] for cellcol in list_of_lists]
+
+        if set(top_row + bottom_row + left_col + right_col) != {'W'}:
+            raise ValueError('edges has to be water!')
+
+
         cells_object_list_of_list = []
         for i, row in enumerate(list_of_lists):
             one_d_list = []
@@ -50,8 +59,11 @@ class Island:
         # print(np.asarray(cells_object_list_of_list).shape)
         return cells_object_list_of_list
 
-    def populate(self, population):
-        pass
+    def populate_cells(self, population):
+
+        for cell_coord in population:
+            x, y = cell_coord.get('loc')
+            self.island[x][y].place_animals(cell_coord.get('pop'))
 
     def annual_cycle(self):
         pass
@@ -86,22 +98,16 @@ class Island:
                             migrating_cell.place_animals(values)
                             cell.remove_animals(values)
 
-
-
                     # gets a dictionary of [cell1: [], cell2[] )
                     # cell1.add_immigrants()
                     # cell.remove_animals()
 
-    #def animal_loc_after_migration(self, migrated_anims_dct):
+    # def animal_loc_after_migration(self, migrated_anims_dct):
     #    relocated_animals = []
 
     #    for cell in migrated_anims_dct.keys():
     #        if cell.habitable_cell:
     #            cell.values()
-
-
-
-
 
     def animals_feed_all(self):
         pass
@@ -128,12 +134,14 @@ if __name__ == "__main__":
     WHHW
     WLLW
     WWWW""")
+    print(I)
+
+    # Spør Ta om place_animals endringen og hvordan det påvirker resten
 
     # print( np.asarray(I.island).shape)
 
+    #I.island[1][1].herbivores = [Herbivore() for _ in range(50)]
+    #print(len(I.island[1][1].herbivores))
 
-    I.island[1][1].herbivores = [Herbivore() for _ in range(50)]
-    print(len(I.island[1][1].herbivores))
-
-    I.start_migration()
-    print( len( I.island[1][1].herbivores ) )
+    #I.start_migration()
+    #print(len(I.island[1][1].herbivores))

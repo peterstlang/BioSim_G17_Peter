@@ -7,13 +7,17 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
-# Need imports
+from biosim.animals import Herbivore, Carnivore
+from biosim.landscape import Lowland, Highland, Desert, Water
+from biosim.island import Island
+import numpy as np
+
 
 class BioSim:
 
     def __init__(self, island_map, ini_pop, seed,
                  ymax_animals=None, cmax_animals=None,
-                 hist_specs=None, img_base=None, img_fmt=’png’):
+                 hist_specs=None, img_base=None, img_fmt="png"):
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
@@ -38,30 +42,23 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-        pass
-
-    def create_map(self, string_of_map):
-        #"""WW
-        #            LL
-        #            HH"""
-        #type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
-        #list_of_lists = [['W', 'W'],
-        #                 ['L', 'L'],
-        #                 ['H', 'H']]
-        #cells_object_list_of_list = []
-        #for i, row in enumerate(list_of_lists):
-        #    for j, cell in enumerate(row):
-        #        cells_object_list_of_list.append(type_of_landscape[list_of_lists[i][j]])
-        #pass
-        #map_of_cells = [list(cell) for cell in string_of_map.splitlines()]
+        self.year = 0
+        self.island = Island().create_map(island_map)
+        self.ini_pop = ini_pop
+        self.seed = np.random.seed(seed)
+        self.img_fmt = img_fmt
 
     def set_animal_parameters(self, species, params):
+        # Spør om static method
         """
         Set parameters for animal species.
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        pass
+        if species == "Herbivore":
+            Herbivore.set_parameters(params)
+        if species == "Carnivore":
+            Carnivore.set_parameters(params)
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -69,7 +66,13 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        pass
+        if landscape == "Lowland":
+            Lowland.set_parameters(params)
+        elif landscape == "Highland":
+            Highland.set_parameters()
+        else:
+            raise ValueError('Lowland and Highland are the'
+                             'only ones that can have different parameters')
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
@@ -86,12 +89,12 @@ class BioSim:
         Add a population to the island
         :param population: List of dictionaries specifying population
         """
-        pass
+        self.island.populate_cells(population)
 
     @property
     def year(self):
         """Last year simulated."""
-        pass
+        return self.current_year
 
     @property
     def num_animals(self):
