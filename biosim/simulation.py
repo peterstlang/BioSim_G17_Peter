@@ -42,13 +42,14 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-        self.year = 0
-        self.island = Island().create_map(island_map)
+        self.current_year = 0
+        self.island = Island(island_map)
         self.ini_pop = ini_pop
         self.seed = np.random.seed(seed)
         self.img_fmt = img_fmt
 
-    def set_animal_parameters(self, species, params):
+    @staticmethod
+    def set_animal_parameters(species, params):
         # Spør om static method
         """
         Set parameters for animal species.
@@ -60,16 +61,17 @@ class BioSim:
         if species == "Carnivore":
             Carnivore.set_parameters(params)
 
-    def set_landscape_parameters(self, landscape, params):
+    @staticmethod
+    def set_landscape_parameters(landscape, params):
         """
         Set parameters for landscape type.
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        if landscape == "Lowland":
+        if landscape == "L":
             Lowland.set_parameters(params)
-        elif landscape == "Highland":
-            Highland.set_parameters()
+        elif landscape == "H":
+            Highland.set_parameters(params)
         else:
             raise ValueError('Lowland and Highland are the'
                              'only ones that can have different parameters')

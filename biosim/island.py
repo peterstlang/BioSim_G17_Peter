@@ -66,7 +66,12 @@ class Island:
             self.island[x][y].place_animals(cell_coord.get('pop'))
 
     def annual_cycle(self):
-        pass
+        self.animals_feed_all()
+        self.animals_procreate()
+        self.start_migration()
+        self.animals_age()
+        self.animals_weightloss()
+        self.animals_die()
 
     def get_adjacent_cells(self, current_cell_coord):
         """
@@ -110,22 +115,24 @@ class Island:
     #            cell.values()
 
     def animals_feed_all(self):
-        pass
+        for cell in self.island.flatten():
+            cell.feed_animals()
 
     def animals_procreate(self):
-        pass
-
-    def animals_migrate(self):
-        pass
+        for cell in self.island.flatten():
+            cell.procreation_animals()
 
     def animals_age(self):
-        pass
+        for cell in self.island.flatten():
+            cell.aging_animals()
 
     def animals_weightloss(self):
-        pass
+        for cell in self.island.flatten():
+            cell.animals_yearly_weight_loss()
 
     def animals_die(self):
-        pass
+        for cell in self.island.flatten():
+            cell.animals_die()
 
 
 if __name__ == "__main__":

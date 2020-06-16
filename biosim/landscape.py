@@ -73,14 +73,14 @@ class Cell:
     def remove_animals(self, animallist):
         """
 
-        :param animal: class instance
+        :param animallist: class instance
         :return:
         """
-        for anim in animallist:
-            if anim.__class__.__name__ == 'Herbivore':
-                self.herbivores.remove(anim)
-            if anim.__class__.__name__ == 'Carnivore':
-                self.carnivores.remove(anim)
+        for anim_to_remove in animallist:
+            if anim_to_remove.__class__.__name__ == 'Herbivore':
+                self.herbivores.remove(anim_to_remove)
+            if anim_to_remove.__class__.__name__ == 'Carnivore':
+                self.carnivores.remove(anim_to_remove)
 
     def feed_herbivores(self):
         """
@@ -305,7 +305,7 @@ class Highland(Cell):
         self.fodder = self.parameters['f_max']
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # This code was written by Professor Hans
     #seeds = range(200, 205)
     #years = 250
@@ -335,31 +335,5 @@ if __name__ == "__main__":
     #mean_counts = mean_counts[mean_counts[:, 0].argsort()]
     #print(mean_counts)
     #plt.show()
-    listof = [{'species': 'Herbivore',
-               'age': 5,
-               'weight': 25}
-              for _ in range(150)]
-    l = Lowland()
-    print(l.fodder)
-    # place them in list
-    l.place_animals(listof)
-    # make them eat
-    l.feed_animals()
-    # for herb in l.herb_list:
-    #     print(herb.fitness(), end=',')
 
-    # make them reproduce
-    print("")
-    print(len(l.herbivores))
-    l.procreation_animals()
-    print(len(l.herbivores))
-
-    # make them die
-    l.animals_die()
-    print(len(l.herbivores))
-
-    # get older and continue the cycle for next year
-    l.aging_animals()
-    for anim in l.herbivores:
-        print(anim.age, end=',')
 

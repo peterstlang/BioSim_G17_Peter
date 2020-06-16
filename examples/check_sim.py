@@ -7,7 +7,6 @@ from biosim.simulation import BioSim
 
 """
 Compatibility check for BioSim simulations.
-
 This script shall function with biosim packages written for
 the INF200 project June 2020.
 """
