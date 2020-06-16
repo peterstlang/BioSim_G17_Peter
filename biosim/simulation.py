@@ -43,14 +43,16 @@ class BioSim:
         img_base should contain a path and beginning of a file name.
         """
         self.current_year = 0
-        self.island = Island(island_map)
-        self.ini_pop = ini_pop
+        self.island = Island(island_map).island
+
+        # add initial population
+        print(ini_pop)
+        self.add_population(ini_pop)
         self.seed = np.random.seed(seed)
         self.img_fmt = img_fmt
 
     @staticmethod
     def set_animal_parameters(species, params):
-        # Spør om static method
         """
         Set parameters for animal species.
         :param species: String, name of animal species
@@ -84,14 +86,25 @@ class BioSim:
         :param img_years: years between visualizations saved to files (default: vis_years)
         Image files will be numbered consecutively.
         """
-        pass
+        i = Island("WW")
+        for yr in range(num_years):
+            self.current_year += 1
+            i.annual_cycle(self.island)
+            # for cell in self.island.flatten():
+            #     if cell.habitable_cell:
+            #         self.island.annual_cycle()
+
 
     def add_population(self, population):
         """
         Add a population to the island
         :param population: List of dictionaries specifying population
         """
-        self.island.populate_cells(population)
+        # self.island.populate_cells(population)
+
+        for cell_coord in population:
+            x, y = cell_coord.get('loc')
+            self.island[x][y].place_animals(cell_coord.get('pop'))
 
     @property
     def year(self):
@@ -101,12 +114,12 @@ class BioSim:
     @property
     def num_animals(self):
         """Total number of animals on island."""
-        pass
+        return self.island.total_num_animals()
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
-        pass
+        return self.island.get_num_animals_per_species()
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""

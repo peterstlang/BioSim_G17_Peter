@@ -49,6 +49,12 @@ class Cell:
         """
         pass
 
+    def add_migrated_animals(self, listofanim):
+        herbs = [anim for anim in listofanim if anim.__class__.__name__ == 'Herbivore']
+        carns = [anim for anim in listofanim if anim.__class__.__name__ == 'Carnivore']
+        self.herbivores.extend(herbs)
+        self.carnivores.extend(carns)
+
     def place_animals(self, list_animals):
         """
         Takes a list of animals and place them in the cell.
@@ -199,6 +205,17 @@ class Cell:
         """
         return len(self.herbivores), len(self.carnivores)
 
+    @property
+    def num_herbs(self):
+        return len(self.herbivores)
+
+    @property
+    def num_carns(self):
+        return len(self.carnivores)
+
+    def total_num_animals(self):
+        return len(self.herbivores) + len(self.carnivores)
+
     def get_remaining_fodder(self):
         """
         Returns the amount of fodder left in a cell.
@@ -304,36 +321,33 @@ class Highland(Cell):
         """
         self.fodder = self.parameters['f_max']
 
-
 # if __name__ == "__main__":
-    # This code was written by Professor Hans
-    #seeds = range(200, 205)
-    #years = 250
-    #mean_counts = np.zeros((len(seeds), 2))
-    #for sn, seed in enumerate(seeds):
-    #    np.random.seed(seed)
-    #    c = Lowland()
-    #    herbs = list()
-    #    for i in range(50):
-    #        herbs.append(Herbivore(5, 20))
-    #    carns = list()
-    #    for i in range(20):
-    #        carns.append(Carnivore(5, 20))
-    #    c.place_animals(herbs)
-    #    num_animals = np.zeros((years, 2))
-    #    for i in range(years):
-    #        if i == 50:
-    #            c.place_animals(carns)
-    #        c.feed_animals()
-    #        c.procreation_animals()
-    #        c.aging_animals()
-    #        c.animals_yearly_weight_loss()
-    #        c.animals_die()
-    #        num_animals[i, :] = c.get_num_animals()
-    #    mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
-    #    plt.plot(num_animals)
-    #mean_counts = mean_counts[mean_counts[:, 0].argsort()]
-    #print(mean_counts)
-    #plt.show()
-
-
+# This code was written by Professor Hans
+# seeds = range(200, 205)
+# years = 250
+# mean_counts = np.zeros((len(seeds), 2))
+# for sn, seed in enumerate(seeds):
+#    np.random.seed(seed)
+#    c = Lowland()
+#    herbs = list()
+#    for i in range(50):
+#        herbs.append(Herbivore(5, 20))
+#    carns = list()
+#    for i in range(20):
+#        carns.append(Carnivore(5, 20))
+#    c.place_animals(herbs)
+#    num_animals = np.zeros((years, 2))
+#    for i in range(years):
+#        if i == 50:
+#            c.place_animals(carns)
+#        c.feed_animals()
+#        c.procreation_animals()
+#        c.aging_animals()
+#        c.animals_yearly_weight_loss()
+#        c.animals_die()
+#        num_animals[i, :] = c.get_num_animals()
+#    mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
+#    plt.plot(num_animals)
+# mean_counts = mean_counts[mean_counts[:, 0].argsort()]
+# print(mean_counts)
+# plt.show()

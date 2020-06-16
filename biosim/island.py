@@ -38,7 +38,7 @@ class Island:
         # type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
 
         multi_line_string = multi_line_string.strip()
-        list_of_lists = [list(cell) for cell in multi_line_string.splitlines()]
+        list_of_lists = [list(cel) for cel in multi_line_string.splitlines()]
 
         top_row = list_of_lists[0]
         bottom_row = list_of_lists[-1]
@@ -65,13 +65,13 @@ class Island:
             x, y = cell_coord.get('loc')
             self.island[x][y].place_animals(cell_coord.get('pop'))
 
-    def annual_cycle(self):
-        self.animals_feed_all()
-        self.animals_procreate()
-        self.start_migration()
-        self.animals_age()
-        self.animals_weightloss()
-        self.animals_die()
+    def annual_cycle(self, input_island):
+        self.animals_feed_all(input_island)
+        self.animals_procreate(input_island)
+        self.start_migration(input_island)
+        self.animals_age(input_island)
+        self.animals_weightloss(input_island)
+        self.animals_die(input_island)
 
     def get_adjacent_cells(self, current_cell_coord):
         """
@@ -83,25 +83,26 @@ class Island:
         four_adj_cells = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
         return four_adj_cells
 
-    def start_migration(self):
-        for row, rows_of_cell_obj in enumerate(self.island):
-            for col, cell in enumerate(rows_of_cell_obj):
-                for anim in cell.herbivores + cell.carnivores:
+    def start_migration(self, input_island ):
+        for row, rows_of_cell_obj in enumerate(input_island):
+            for col, cel in enumerate(rows_of_cell_obj):
+                for anim in cel.herbivores + cel.carnivores:
                     anim.set_has_migrated(False)
                     # anim.animals_has_migrated = False # Do it through a function in animal class later
 
-        for row, rows_of_cell_obj in enumerate(self.island):
+        for row, rows_of_cell_obj in enumerate(input_island):
             # print(rows_of_cell_obj)
-            for col, cell in enumerate(rows_of_cell_obj):
+            for col, cel in enumerate(rows_of_cell_obj):
 
-                if cell.habitable_cell:
+                if cel.habitable_cell:
                     adjacent_cord = self.get_adjacent_cells((row, col))
-                    adjacent_cells = [self.island[row][col] for row, col in adjacent_cord]
-                    animals_dct = cell.migration(adjacent_cells)
+                    adjacent_cells = [input_island[row][col] for row, col in adjacent_cord]
+                    animals_dct = cel.migration(adjacent_cells)
                     for migrating_cell, values in animals_dct.items():
                         if values:
-                            migrating_cell.place_animals(values)
-                            cell.remove_animals(values)
+                            # print(values)
+                            migrating_cell.add_migrated_animals(values)
+                            cel.remove_animals(values)
 
                     # gets a dictionary of [cell1: [], cell2[] )
                     # cell1.add_immigrants()
@@ -114,25 +115,50 @@ class Island:
     #        if cell.habitable_cell:
     #            cell.values()
 
-    def animals_feed_all(self):
-        for cell in self.island.flatten():
-            cell.feed_animals()
+    def animals_feed_all(self, input_island):
+        for cel in np.asarray(input_island).flatten():
+            cel.feed_animals()
 
-    def animals_procreate(self):
-        for cell in self.island.flatten():
-            cell.procreation_animals()
+    def animals_procreate(self, input_island):
+        for cel in np.asarray(input_island).flatten():
+            cel.procreation_animals()
 
-    def animals_age(self):
-        for cell in self.island.flatten():
+    def animals_age(self, input_island):
+        for cell in np.asarray(input_island).flatten():
             cell.aging_animals()
 
-    def animals_weightloss(self):
-        for cell in self.island.flatten():
+    def animals_weightloss(self, input_island):
+        for cell in np.asarray(input_island).flatten():
             cell.animals_yearly_weight_loss()
 
-    def animals_die(self):
-        for cell in self.island.flatten():
+    def animals_die(self, input_island):
+        for cell in np.asarray(input_island).flatten():
             cell.animals_die()
+
+    def get_num_animals_per_species(self):
+
+        animals_per_species = {}
+        num_herbs = 0
+        num_carns = 0
+
+        for cell in np.asarray(self.island).flatten():
+            num_herbs += cell.num_herbs
+            num_carns += cell.num_carns
+
+        animals_per_species['Herbivore'] = num_herbs
+        animals_per_species['Carnivore'] = num_carns
+
+        return animals_per_species
+
+    def total_num_animals(self):
+        num_animals = 0
+        for cell in np.asarray(self.island).flatten():
+            num_animals += cell.total_num_animals()
+
+        return num_animals
+
+
+
 
 
 if __name__ == "__main__":
@@ -141,7 +167,10 @@ if __name__ == "__main__":
     WHHW
     WLLW
     WWWW""")
-    print(I)
+    for cell in np.asarray(I.island).flatten():
+        print(cell)
+
+
 
     # Spør Ta om place_animals endringen og hvordan det påvirker resten
 
