@@ -14,9 +14,6 @@ from biosim.landscape import Lowland, Water, Highland, Desert
 from biosim.animals import Herbivore, Carnivore
 
 
-# This code is straight from bishnu, im gonna rewrite it, i just need to get an
-# understanding of plotting
-
 class Visuals:
     """
     The class for all the visuals and plots
