@@ -10,7 +10,9 @@ __email__ = 'pelangda@nmbu.no'
 from biosim.animals import Herbivore, Carnivore
 from biosim.landscape import Lowland, Highland, Desert, Water
 from biosim.island import Island
+from biosim.visuals import Visuals
 import numpy as np
+import pandas as pd
 
 
 class BioSim:
@@ -43,13 +45,33 @@ class BioSim:
         img_base should contain a path and beginning of a file name.
         """
         self.current_year = 0
+        self.final_year = None
         self.island = Island(island_map).island
+        # self.rgb_map = Island.create_rgb_map(island_map)
+
+        # if ymax_animals is None:
+        #    ymax_animals = 20000
+        # self.ymax = ymax_animals
+
+        # if cmax_animals is None:
+        #    cmax_herb = 20000
+        #    cmax_carn = 20000
+        # else:
+        #    cmax_herb = cmax_animals['Herbivore']
+        #    cmax_carn = cmax_animals['Carnivore']
+
+        # self.cmax_herb = cmax_herb
+        # self.cmax_carn = cmax_carn
 
         # add initial population
-        print(ini_pop)
+        # print(ini_pop)
         self.add_population(ini_pop)
         self.seed = np.random.seed(seed)
         self.img_fmt = img_fmt
+
+        self.visuals = Visuals()
+
+        self.visuals.set_plots(rgb_map=self.rgb_map(island_map))
 
     @staticmethod
     def set_animal_parameters(species, params):
@@ -86,14 +108,66 @@ class BioSim:
         :param img_years: years between visualizations saved to files (default: vis_years)
         Image files will be numbered consecutively.
         """
+        # self.x_axis_limit += num_years
         i = Island("WW")
         for yr in range(num_years):
             self.current_year += 1
             i.annual_cycle(self.island)
-            # for cell in self.island.flatten():
-            #     if cell.habitable_cell:
-            #         self.island.annual_cycle()
 
+            # print( self.heatmap_of_population() )
+            self.visuals.update_heat_maps(anim_distribution_dict=self.heatmap_of_population()
+                                          )
+            self.visuals.update_line_plt(self.heat_num_animals)
+
+    def map_length(self):
+        """
+        The length of each map axis is calculated
+        :return: 2 int
+        We get the horizontal and vertical length of the map
+
+        """
+        lines = self.inserted_map.strip()
+        lines = lines.split('\n')
+        x_map = len(lines[0])
+        y_map = len(lines)
+        return x_map, y_map
+
+    def rgb_map(self, str_raw_val):
+        """
+        The colored island map that is displayed in the plot
+        is created, this code is heavily inspired by Hans' code in
+        the example directory
+        :param str_raw_val:
+        :return:
+        """
+        rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
+                     'L': (0.0, 0.6, 0.0),  # dark green
+                     'H': (0.5, 1.0, 0.5),  # light green
+                     'D': (1.0, 1.0, 0.5)}  # light yellow
+        map_rgb = [[rgb_value[col] for col in row]
+                   for row in str_raw_val.splitlines()]
+
+        return map_rgb
+
+    def heatmap_of_population(self):
+        """
+
+        :return: dict
+        """
+        row_num = np.shape(self.island)[0]
+        column_num = np.shape(self.island)[1]
+
+        h_matrix = np.zeros((row_num, column_num))
+        c_matrix = np.zeros((row_num, column_num))
+
+        for row, lines in enumerate(self.island):
+            for col, cell in enumerate(lines):
+                # print(cell.herb_list)
+                h_matrix[row][col] = len(cell.herbivores)
+                c_matrix[row][col] = len(cell.carnivores)
+
+        animal_distribution_dict = {"Herbivore": h_matrix, "Carnivore": c_matrix}
+        return animal_distribution_dict
 
     def add_population(self, population):
         """
@@ -112,15 +186,33 @@ class BioSim:
         return self.current_year
 
     @property
+    def heat_num_animals(self):
+        """Total number of animals on island."""
+        total_herbivores = sum(sum(self.heatmap_of_population()['Herbivore']))
+        total_carnivores = sum(sum(self.heatmap_of_population()['Carnivore']))
+        animal_count_dict = {"Herbivore": total_herbivores, "Carnivore": total_carnivores}
+        print(animal_count_dict)
+        return animal_count_dict
+        # return self.island.total_num_animals()
+
+    @property
     def num_animals(self):
         """Total number of animals on island."""
-        return self.island.total_num_animals()
+        sum = 0
+        for key, values in self.heat_num_animals.items():
+            sum += values
+        return sum
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
-        return self.island.get_num_animals_per_species()
+        return self.heat_num_animals
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
         pass
+
+# if __name__ == "__main__":
+# i = Island('WW')
+# print(i.create_rgb_map('WW'))
+

@@ -12,9 +12,6 @@ import operator
 import matplotlib.pyplot as plt
 
 
-# np.random.seed(1)
-
-
 class Cell:
     """
     Cell superclass.
@@ -39,21 +36,29 @@ class Cell:
         constructor for Cell superclass.
         """
         self.fodder = 0
-        self.herbivores = []
-        self.carnivores = []
+        self.herbivore = []
+        self.carnivore = []
+        self.habitable_cell = True
 
     def grow_fodder(self):
         """
-
-        :return:
+        This happens in the subclass so its
+        just passed here
         """
         pass
 
     def add_migrated_animals(self, listofanim):
-        herbs = [anim for anim in listofanim if anim.__class__.__name__ == 'Herbivore']
-        carns = [anim for anim in listofanim if anim.__class__.__name__ == 'Carnivore']
-        self.herbivores.extend(herbs)
-        self.carnivores.extend(carns)
+        """
+        This method is used in the migration,
+        it takes a list of animals and extend the corresponding list
+        :param listofanim: list
+        the animals has to be sorted in a list
+        """
+        if self.habitable_cell:
+            herbs = [anim for anim in listofanim if anim.__class__.__name__ == 'Herbivore']
+            carns = [anim for anim in listofanim if anim.__class__.__name__ == 'Carnivore']
+            self.herbivore.extend(herbs)
+            self.carnivore.extend(carns)
 
     def place_animals(self, list_animals):
         """
@@ -70,32 +75,32 @@ class Cell:
             species = animal['species']
 
             if species == 'Herbivore':
-                self.herbivores.append(Herbivore(age, weight))
+                self.herbivore.append(Herbivore(age, weight))
             elif species == 'Carnivore':
-                self.carnivores.append(Carnivore(age, weight))
+                self.carnivore.append(Carnivore(age, weight))
             else:
                 raise KeyError('must be either herbivore or carnivore')
 
     def remove_animals(self, animallist):
         """
-
-        :param animallist: class instance
-        :return:
+        This method takes a list of animals and removes
+        them from the cell
+        :param animallist: list
         """
         for anim_to_remove in animallist:
             if anim_to_remove.__class__.__name__ == 'Herbivore':
-                self.herbivores.remove(anim_to_remove)
+                self.herbivore.remove(anim_to_remove)
             if anim_to_remove.__class__.__name__ == 'Carnivore':
-                self.carnivores.remove(anim_to_remove)
+                self.carnivore.remove(anim_to_remove)
 
     def feed_herbivores(self):
         """
         Feeds Herbivores in the cell until their is no fodder, or hungry
         herbivores left
         """
-        np.random.shuffle(self.herbivores)
+        np.random.shuffle(self.herbivore)
 
-        for herb in self.herbivores:
+        for herb in self.herbivore:
             food_available = self.fodder
             food_eaten = herb.eat(food_available)
             self.fodder -= food_eaten
@@ -106,14 +111,13 @@ class Cell:
         or there are no herbivores left. The fittest carnivores eat first and
         they try to kill/eat the herbivores with the lowest fitness
         """
-        self.carnivores.sort(key=operator.attrgetter("fitness"), reverse=True)
-        self.herbivores.sort(key=operator.attrgetter("fitness"))
+        self.carnivore.sort(key=operator.attrgetter("fitness"), reverse=True)
+        self.herbivore.sort(key=operator.attrgetter("fitness"))
 
-        for carn in self.carnivores:
-            dead_herbs = carn.eat_a_herb(self.herbivores)
-            surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
-            self.herbivores = surviving_herbs
-            self.herbivores.sort(key=operator.attrgetter("fitness"))
+        for carn in self.carnivore:
+            self.herbivore = carn.eat_a_herb(self.herbivore)
+            # surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
+            # self.herbivores = surviving_herbs
 
     def feed_animals(self):
         """
@@ -129,52 +133,50 @@ class Cell:
         This method will mate the animals and add the offspring
         to the list of animals
         """
-        # ønsker å bruke denne metoden for begge arter.
-        # Må finne en god løsning for dette.
         herb_offspring = []
-        num_adult_herbs = len(self.herbivores)
+        num_adult_herbs = len(self.herbivore)
 
-        if num_adult_herbs >= 2:
-            for herb in self.herbivores:
+        if num_adult_herbs > 1:
+            for herb in self.herbivore:
                 new_offspring = herb.give_birth(num_adult_herbs)
                 if new_offspring:
                     child = Herbivore()
                     herb_offspring.append(child)
                     herb.weight_after_birth(child.weight)
 
-        self.herbivores.extend(herb_offspring)
+        self.herbivore.extend(herb_offspring)
 
         carn_offspring = []
-        num_adult_carns = len(self.carnivores)
+        num_adult_carns = len(self.carnivore)
 
-        if num_adult_carns >= 2:
-            for carn in self.carnivores:
+        if num_adult_carns > 1:
+            for carn in self.carnivore:
                 new_offspring = carn.give_birth(num_adult_carns)
                 if new_offspring:
                     child = Carnivore()
                     carn_offspring.append(child)
                     carn.weight_after_birth(child.weight)
 
-        self.carnivores.extend(carn_offspring)
+        self.carnivore.extend(carn_offspring)
 
     def aging_animals(self):
         """
         ages the animals in a cell
         """
-        for herb in self.herbivores:
+        for herb in self.herbivore:
             herb.update_age()
 
-        for carn in self.carnivores:
+        for carn in self.carnivore:
             carn.update_age()
 
     def animals_yearly_weight_loss(self):
         """
         Updates the weight of the animals in a cell
         """
-        for herb in self.herbivores:
+        for herb in self.herbivore:
             herb.yearly_weight_loss()
 
-        for carn in self.carnivores:
+        for carn in self.carnivore:
             carn.yearly_weight_loss()
 
     def animals_die(self):
@@ -184,56 +186,74 @@ class Cell:
         :return:
         """
         dead_herbivores = []
-        for herb in self.herbivores:
+        for herb in self.herbivore:
             if herb.death():
                 dead_herbivores.append(herb)
         for dead_herb in dead_herbivores:
-            self.herbivores.remove(dead_herb)
+            self.herbivore.remove(dead_herb)
 
         dead_carnivores = []
-        for carn in self.carnivores:
+        for carn in self.carnivore:
             if carn.death():
                 dead_carnivores.append(carn)
         for dead_carn in dead_carnivores:
-            self.carnivores.remove(dead_carn)
+            self.carnivore.remove(dead_carn)
 
     def get_num_animals(self):
         """
-        Gives the user a tuple. The left most values are the amount
-        of herbivores in a cell and the rightmost is carnivores.
+        Gives the number of animals in a cell
         :return: tuple
+        the number of animals is returned as a tuple,
+        where the leftmost value is herbivores, and the rightmost one
+        is carnivores
         """
-        return len(self.herbivores), len(self.carnivores)
+        return len(self.herbivore), len(self.carnivore)
 
     @property
     def num_herbs(self):
-        return len(self.herbivores)
+        """
+        :return: int
+        Returns the number of herbivores as an int
+        """
+        return len(self.herbivore)
 
     @property
     def num_carns(self):
-        return len(self.carnivores)
+        """
+        :return: int
+        This returns how many carnivores is in the list as an int
+        """
+        return len(self.carnivore)
 
     def total_num_animals(self):
-        return len(self.herbivores) + len(self.carnivores)
+        """
+        :return: int
+        This returns the total number of animals as an int
+        instead of a tuple
+        """
+        return len(self.herbivore) + len(self.carnivore)
 
     def get_remaining_fodder(self):
         """
         Returns the amount of fodder left in a cell.
-        :return:
+        :return: int
+        The amount of fodder is given as an int
         """
         return self.fodder
 
     def migration(self, adj_cells):
         """
-        This method takes an animal and calculates the probability for it
-        to move. If it decides to move it will pick one of the four
-        neighbouring cells at random and move
-
-        :return:
+        An empty dictionary is created and a list of all the animals are
+        created
+        :param adj_cells: 4 tuples
+        :return: dict
+        The empty dictionary is returned with each of the
+        adjacent cells as keys and the animals in each cell as values
+        the values are in list form
         """
 
         anims_that_migrate = {}
-        anim_list = self.carnivores + self.herbivores
+        anim_list = self.carnivore + self.herbivore
         for anim in anim_list:
             if anim.will_move() and not anim.animals_has_migrated:
                 destination_cell = np.random.choice(adj_cells)
@@ -245,7 +265,6 @@ class Cell:
 
         for anim in anim_list:
             anim.set_has_migrated(True)
-            # spør om den her egt er riktig?
 
         return anims_that_migrate
 
@@ -255,13 +274,12 @@ class Water(Cell):
     Water subclass
     """
 
-    habitable_cell = False
-
     def __init__(self):
         """
-
+        constructor for the water subclass
         """
         super().__init__()
+        self.habitable_cell = False
 
 
 class Desert(Cell):
@@ -269,11 +287,9 @@ class Desert(Cell):
     Desert subclass
     """
 
-    habitable_cell = True
-
     def __init__(self):
         """
-
+        constructor for the desert subclass
         """
         super().__init__()
 
@@ -282,20 +298,20 @@ class Lowland(Cell):
     """
     Lowland subclass
     """
-    habitable_cell = True
     parameters = {'f_max': 800.0}
 
     def __init__(self):
         """
-
+        constructor for the lowland subclass
+        We set the parameters since fodder can grow here
         """
         super().__init__()
         self.fodder = self.parameters['f_max']
 
     def grow_fodder(self):
         """
-
-        :return:
+        Sets the amount of fodder equal to the parameter
+        its 800 by default but can be changed
         """
         self.fodder = self.parameters['f_max']
 
@@ -304,20 +320,20 @@ class Highland(Cell):
     """
     Highland subclass
     """
-    habitable_cell = True
     parameters = {'f_max': 300.0}
 
     def __init__(self):
         """
-
+        constructor for the highland subclass
+        We set the parameters since fodder can grow here
         """
         super().__init__()
         self.fodder = self.parameters['f_max']
 
     def grow_fodder(self):
         """
-
-        :return:
+        Sets the amount of fodder equal to the parameter
+        its 300 by default but can be changed
         """
         self.fodder = self.parameters['f_max']
 

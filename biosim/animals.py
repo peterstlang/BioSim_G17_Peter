@@ -66,8 +66,7 @@ class Animal:
     @staticmethod
     def compute_q(sign, x, x_half, phi):
         """
-        this function computes q, which will be used when we compute the
-        fitness off the animal.
+        q is computed, and will be used when fitness is computed
         :param sign: int, float
         is 1/(1.0) or -1/(-1.0)
         :param x: int, float
@@ -79,8 +78,8 @@ class Animal:
 
     def compute_fitness(self):
         """
-        This method computes the animals fitness using q
-        and the parameters.
+        The fitness is calculated, we use q and the animals parameters
+        to determine the fitness of the animal
         :return: float
         """
         if self.weight == 0:
@@ -88,64 +87,69 @@ class Animal:
         else:
             p = self.parameters
             fit = self.compute_q(+1, self.age, p['a_half'], p['phi_age']) * \
-                  self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
+                self.compute_q(-1, self.weight, p['w_half'], p['phi_weight'])
             return fit
 
     def recalculate_fitness(self):
         """
         recalculates and updates fitness based on
-        new and updated values of age and weight.
-        A lot of things affect the fitness, which is
-        why we need this function
+        new and updated values of age, weight and the parameters.
+        Most of the processes animals go through will affect its fitness
+        which is why we need to recalculate it on several occasions
         """
         self.fitness = self.compute_fitness()
 
     def update_age(self):
         """
-        This method updates the animals age for every year that passes
+        For each year that passes the animals will age 1 year
         """
         self.age += 1
         self.recalculate_fitness()
 
     def will_move(self):
         """
-        This method calculates the chance of an animal to move to a
-        different cell. This method doesn't decide which square.
+        The animals may or may not migrate.
         :return: bool
+        If its False the animals simply stay in the cell, if its True
+        The animals will migrate to one of four adjacent cells
         """
 
         prob_move = self.parameters['mu'] * self.fitness
         random_num = np.random.random()
+        # return True
         return prob_move > random_num
 
     def weight_at_birth(self):
         """
-        If a new animal is born or the age is put at 0,
-        this will assign a weight
+        If a new animal is born or the age is put at 0
+        (aka the animal placed is a newborn),
+        We will assign a weight from a normal distribution
         :return: int, float
         """
         return np.random.normal(self.parameters['w_birth'],
                                 self.parameters['sigma_birth'])
 
-    def eat(self, food_available):
-        """
-        This method handles how Herbivores eat.
-        :param food_available: int, float
-        :return: int, float
-        """
-        if food_available < self.parameters['F']:
-            food_eaten = food_available
-        else:
-            food_eaten = self.parameters['F']
-        self.weight += self.parameters['beta'] * food_eaten
-        self.recalculate_fitness()
-        return food_eaten
+    # def eat(self, food_available):
+    #    """
+    #    This method handles how Herbivores eat.
+    #    :param food_available: int, float
+    #    :return: int, float
+    #    """
+    #    if food_available < self.parameters['F']:
+    #        food_eaten = food_available
+    #    else:
+    #        food_eaten = self.parameters['F']
+    #    self.weight += self.parameters['beta'] * food_eaten
+    #    self.recalculate_fitness()
+    #    return food_eaten
 
     def give_birth(self, num_animals):
         """
-        Determines whether or not 2 animals will give birth to offspring.
+        An animal can be born if there are at least 2 animals, but that
+        condition is checked later.
         :param num_animals: int
         :return: bool
+        If its False no animal is born, if its True an animal is born
         """
         p = self.parameters
         random_num = np.random.random()
@@ -157,14 +161,16 @@ class Animal:
 
     def yearly_weight_loss(self):
         """
-        This method deals with how much weight an animal loses each year.
+        The animals will lose an amount of weight each year
+        based on certain parameters. The fitness is recalculated after
         """
         self.weight -= self.weight * self.parameters['eta']
         self.recalculate_fitness()
 
     def weight_after_birth(self, weight):
         """
-        Recalculates the weight after an animal has given birth
+        After an animal has given birth, the weight is updated
+        and the fitness recalculated
         :param weight: int, float
         """
         self.weight -= self.parameters['xi'] * weight
@@ -172,7 +178,9 @@ class Animal:
 
     def death(self):
         """
-        Decides whether or not an animal will die
+        The animals will die if their weight is 0 or less
+        (although it shouldnt be less than 0). If it has a positive weight
+        the probability of death is calculated by certain parameters
         :return: bool
         """
         if self.weight <= 0:
@@ -184,7 +192,10 @@ class Animal:
 
     def set_has_migrated(self, boolean):
         """
-
+        This method is used later in the program. When animals migrate we need
+        to make sure that they only migrate once. This function is called upon
+        and set either True or False, depending on whether they have migrated
+        or not
         :param boolean: bool
         """
         self.animals_has_migrated = boolean
@@ -206,6 +217,22 @@ class Herbivore(Animal):
         """
         super().__init__(age, weight)
 
+    def eat(self, food_available):
+        """
+        Makes sure that the herbivores eat. We also make sure
+        that the herbivores eats the correct amount and stops if there
+        is no fodder left
+        :param food_available: int, float
+        :return: int, float
+        """
+        if food_available < self.parameters['F']:
+            food_eaten = food_available
+        else:
+            food_eaten = self.parameters['F']
+        self.weight += self.parameters['beta'] * food_eaten
+        self.recalculate_fitness()
+        return food_eaten
+
 
 class Carnivore(Animal):
     """
@@ -223,29 +250,11 @@ class Carnivore(Animal):
         """
         super().__init__(age, weight)
 
-    def eat_a_herb(self, sorted_herb_list):
-        """
-        The carnivores eats the herbivores that have been killed
-        :param sorted_herb_list: sorted list
-        :return: list
-        a list of the herbivores
-        """
-        dead_herbs = []
-        eaten_amount = 0
-        for herb in sorted_herb_list:
-            if self.will_kill_herb(herb):
-                eaten_amount += herb.weight
-                self.weight += self.parameters['beta'] * herb.weight
-                self.recalculate_fitness()
-                dead_herbs.append(herb)
-            if eaten_amount >= self.parameters['F']:
-                break
-        return dead_herbs
-
     def will_kill_herb(self, herb):
         """
-        decides whether or not a Carnivore will be able to kill
-        a herbivore.
+        checks several conditions to see if a Carnivore
+        can/and or will kill a herbivore, we also use this when
+        the carnivores start eating
         :param herb: class instance
         :return: bool
         """
@@ -257,3 +266,31 @@ class Carnivore(Animal):
                     / self.parameters['DeltaPhiMax']) > random_num
         else:
             return True
+
+    def eat_a_herb(self, sorted_herb_list):
+        """
+        The carnivores checks if it kills a herbivore.
+        If it doess kill, it will
+        :param sorted_herb_list: sorted list
+        It gets a list of herbivores that is sorted by fitness,
+        from lowest to highest. The ones with lowest gets killed and eaten
+        first
+        :return: list
+        a list of surviving herbivores
+        """
+        dead_herbs = []
+        surv_herbs = []
+        eaten_amount = 0
+        for herb in sorted_herb_list:
+            if self.will_kill_herb(herb):
+                eats = min(herb.weight, self.parameters['F'] - eaten_amount)
+                eaten_amount += eats
+                self.weight += self.parameters['beta'] * eats
+                self.recalculate_fitness()
+                dead_herbs.append(herb)
+            else:
+                surv_herbs.append(herb)
+
+            if eaten_amount >= self.parameters['F']:
+                break
+        return surv_herbs
