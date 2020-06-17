@@ -163,8 +163,8 @@ class BioSim:
         for row, lines in enumerate(self.island):
             for col, cell in enumerate(lines):
                 # print(cell.herb_list)
-                h_matrix[row][col] = len(cell.herbivores)
-                c_matrix[row][col] = len(cell.carnivores)
+                h_matrix[row][col] = len(cell.herbivore)
+                c_matrix[row][col] = len(cell.carnivore)
 
         animal_distribution_dict = {"Herbivore": h_matrix, "Carnivore": c_matrix}
         return animal_distribution_dict

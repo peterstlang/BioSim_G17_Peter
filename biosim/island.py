@@ -116,7 +116,7 @@ class Island:
         """
         for row, rows_of_cell_obj in enumerate(input_island):
             for col, cel in enumerate(rows_of_cell_obj):
-                for anim in cel.herbivores + cel.carnivores:
+                for anim in cel.herbivore + cel.carnivore:
                     anim.set_has_migrated(False)
 
         for row, rows_of_cell_obj in enumerate(input_island):
