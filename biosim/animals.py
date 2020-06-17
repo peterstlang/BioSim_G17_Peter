@@ -295,4 +295,3 @@ class Carnivore(Animal):
                 break
         return surv_herbs
 
-    #checking branch

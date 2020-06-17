@@ -39,13 +39,13 @@ class Visuals:
         plt.axis('off')
 
         # HeatMap
-        self.heatmap_herb = self.fig.add_axes([0.1, 0.28, 0.35, 0.3])  # llx, lly, w, h
+        self.heatmap_herb = self.fig.add_axes([0.1, 0.2, 0.35, 0.3])  # llx, lly, w, h
         self.herb_axis = None
         self.heatmap_herb.title.set_text('Heatmap of Herbi')
         self.heatmap_herb.set_yticklabels([])
         self.heatmap_herb.set_xticklabels([])
 
-        self.heatmap_carn = self.fig.add_axes([0.55, 0.28, 0.35, 0.3])  # llx, lly, w, h
+        self.heatmap_carn = self.fig.add_axes([0.55, 0.2, 0.35, 0.3])  # llx, lly, w, h
         self.carn_axis = None
         self.heatmap_carn.title.set_text('Heat of Carni')
         self.heatmap_carn.set_yticklabels([])
@@ -60,14 +60,14 @@ class Visuals:
         self.island_ax.imshow(rgb_map)
 
         # Histo Fitness
-        self.fit_ax = self.fig.add_subplot(6, 3, 16)
-        self.fit_ax.title.set_text('Fitness Histogram')
-        self.fit_axis = None
-        self.age_ax = self.fig.add_subplot(6, 3, 17)
-        self.age_ax.title.set_text('Age Histogram')
+        #self.fit_ax = self.fig.add_subplot(6, 3, 16)
+        #self.fit_ax.title.set_text('Fitness Histogram')
+        #self.fit_axis = None
+        #self.age_ax = self.fig.add_subplot(6, 3, 17)
+        #self.age_ax.title.set_text('Age Histogram')
 
-        self.wt_ax = self.fig.add_subplot(6, 3, 18)
-        self.wt_ax.title.set_text('Weight Histogram')
+        #self.wt_ax = self.fig.add_subplot(6, 3, 18)
+        #self.wt_ax.title.set_text('Weight Histogram')
 
         # Line Plot num animals
         self.line_ax = self.fig.add_axes([0.55, 0.65, 0.35, 0.3])
