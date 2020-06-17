@@ -44,27 +44,26 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-        self.current_year = 0
+        self.current_year = -1
         self.final_year = None
         self.island = Island(island_map).island
         # self.rgb_map = Island.create_rgb_map(island_map)
 
-        # if ymax_animals is None:
-        #    ymax_animals = 20000
-        # self.ymax = ymax_animals
+        if ymax_animals is None:
+            ymax_animals = 20000
 
-        # if cmax_animals is None:
-        #    cmax_herb = 20000
-        #    cmax_carn = 20000
-        # else:
-        #    cmax_herb = cmax_animals['Herbivore']
-        #    cmax_carn = cmax_animals['Carnivore']
+        self.ymax = ymax_animals
 
-        # self.cmax_herb = cmax_herb
-        # self.cmax_carn = cmax_carn
+        if cmax_animals is None:
+            cmax_herb = 20000
+            cmax_carn = 20000
+        else:
+            cmax_herb = cmax_animals['Herbivore']
+            cmax_carn = cmax_animals['Carnivore']
 
-        # add initial population
-        # print(ini_pop)
+        self.cmax_herb = cmax_herb
+        self.cmax_carn = cmax_carn
+
         self.add_population(ini_pop)
         self.seed = np.random.seed(seed)
         self.img_fmt = img_fmt
@@ -118,6 +117,8 @@ class BioSim:
             self.visuals.update_heat_maps(anim_distribution_dict=self.heatmap_of_population()
                                           )
             self.visuals.update_line_plt(self.heat_num_animals)
+
+            self.visuals.update_year()
 
     def map_length(self):
         """
@@ -215,4 +216,3 @@ class BioSim:
 # if __name__ == "__main__":
 # i = Island('WW')
 # print(i.create_rgb_map('WW'))
-
