@@ -8,7 +8,7 @@ __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 
 from biosim.landscape import Cell, Lowland, Highland, Desert, Water
-from biosim.animals import Animal, Herbivore, Carnivore
+from biosim.animals import Herbivore, Carnivore
 import pytest
 
 
@@ -33,27 +33,40 @@ class TestCell:
         ll = Lowland()
         assert ll.fodder == 800
 
-    def test_animals_placed(self):
-        ll = Lowland()
-        a_list = [Herbivore(), Carnivore()]
-        ll.place_animals(a_list)
-        assert len(ll.herbivores) == 1
-        assert len(ll.carnivores) == 1
+    def test_place_animals(self):
+        c = Cell()
+        herbs = [{'species': 'Herbivore',
+                           'age': 5,
+                           'weight': 20}
+                          for _ in range(40)]
+        carns = [{'species': 'Carnivore',
+                           'age': 5,
+                           'weight': 20}
+                          for _ in range(40)]
 
-    def test_animal_is_birthed(self, mocker):
-        # mocker.patch('give_birth', return_value=True)
-        # h1 = Herbivore()
-        # h2 = Herbivore()
-        # h_list = [h1, h2]
-        # c = Lowland
-        # c.place_animals(h_list)
-        # c.procreation_animals()
-        # assert len(h_list) == 4
-        pass
+        assert c.place_animals(herbs) == c.herbivore.append(herbs)
+        assert c.place_animals(carns) == c.carnivore.append(carns)
 
-    def test_feed_herbivores(self):
-        h_list = [Herbivore()]
-        ll = Lowland()
-        ll.place_animals(h_list)
-        ll.feed_herbivores()
-        assert ll.fodder == 790
+    def test_procreation(self, mocker):
+        mocker.patch('numpy.random.random', return_value=0)
+        l = Lowland()
+        l.herbivore = [Herbivore(5, 50), Herbivore(5, 50)]
+        l.carnivore = [Carnivore(5, 50), Carnivore(5, 50)]
+        l.procreation_animals()
+
+        assert len(l.herbivore) >= 3
+        assert len(l.carnivore) >= 3
+
+    def test_animals_die(self):
+        c = Cell()
+        c.herbivore = [Herbivore(5, 0), Herbivore(5, 100)]
+        c.carnivore = [Carnivore(5, 0), Carnivore(5, 100)]
+        c.herbivore[0].fitness = 0
+        c.herbivore[1].fitness = 1
+        c.carnivore[0].fitness = 0
+        c.carnivore[1].fitness = 1
+        c.animals_die()
+
+        assert len(c.herbivore) == 1
+        assert len(c.carnivore) == 1
+

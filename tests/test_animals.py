@@ -13,13 +13,6 @@ import pytest
 
 class TestAnimal:
 
-    # Heavily inspired by biolab, need to ask some questions regarding this
-    # @pytest.fixture
-    # def set_parameters(request):
-    #    Herbivore.set_parameters(request.param)
-    #    yield
-    #    Herbivore.set_parameters(Herbivore.parameters)
-
     def test_type_error_set_parameters(self):
         with pytest.raises(TypeError):
             h = Herbivore()
@@ -42,11 +35,12 @@ class TestAnimal:
         h.set_parameters(new_params)
         assert h.parameters == new_params
 
-    def test_constructor(self):
-        h = Herbivore()
-        c = Carnivore()
-        assert isinstance(h, Herbivore)
-        assert isinstance(c, Carnivore)
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_constructor(self, animal_class):
+        a = animal_class(5, 20)
+        assert hasattr(a, 'age')
+        assert hasattr(a, 'weight')
+        assert hasattr(a, 'fitness')
 
     def test_subclass(self):
         h = Herbivore()
@@ -84,6 +78,12 @@ class TestAnimal:
         a = animal_class()
         assert a.weight >= 0
 
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_fitness_increase(self, animal_class):
+        a1 = animal_class(5, 10)
+        a2 = animal_class(5, 30)
+        assert a1.fitness <= a2.fitness
+
     def test_yearly_weight_loss(self):
         h = Herbivore(age=1, weight=7)
         h.yearly_weight_loss()
@@ -100,14 +100,40 @@ class TestAnimal:
         h.eat(food_available)
         assert h.weight > 7
 
+    def test_birth(self, mocker):
+        mocker.patch("numpy.random.random", return_value=0)
+        h = Herbivore(5, 50)
+        c = Carnivore(5, 50)
+        herbs = h.give_birth(10)
+        carns = c.give_birth(10)
+        assert herbs
+        assert carns
+
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_death(self, mocker, animal_class):
+        mocker.patch("numpy.random.random", return_value=0)
+
+        a = animal_class(5, 0)
+        dead_animal = a.death()
+        assert dead_animal
+
     def test_kill_herb_is_herb_sorted(self):
         import operator
-        c1 = Carnivore()
         h1 = Herbivore(5, 10)
         h2 = Herbivore(3, 5)
         h3 = Herbivore(10, 20)
         h_list = [h1, h2, h3]
         sorted_list = sorted(h_list, key=operator.attrgetter("fitness"))
         print(sorted_list)
-        # c1.kill_herb(h_list)
         assert set(h_list) == set(sorted_list)
+
+    @pytest.mark.parametrize("animal_class", [Herbivore, Carnivore])
+    def test_gaussian_distribution_ini_weight(self, animal_class):
+        from scipy.stats import kstest
+        alpha = 0.01
+        list_of_ini_weights = []
+        for _ in range(1000):
+            a = animal_class()
+            list_of_ini_weights.append(a.weight)
+            ks, p_value = kstest(list_of_ini_weights, 'norm')
+            assert p_value < alpha
