@@ -21,8 +21,12 @@ class Cell:
     @classmethod
     def set_parameters(cls, parameters):
         """
-        Allows the user to set their own parameters
+        This method allows the user to set the parameters for
+        the landscapes themselves, if they dont want the default ones.
+        Only the values can be changed.
+
         :param parameters: dict
+        If the user doesn't input a dictionary an error will be raised
         """
 
         if not isinstance(parameters, dict):
@@ -41,7 +45,7 @@ class Cell:
 
     def grow_fodder(self):
         """
-        This happens in the subclass so its
+        This happens in the subclasses so its
         just passed here
         """
         pass
@@ -51,6 +55,7 @@ class Cell:
         This method is used in the migration, and makes sure that the migrated
         animals are put in the correct cells.
         it takes a list of animals and extend the corresponding list
+        
         :param listofanim: list
         the animals has to be sorted in a list
         """
@@ -63,7 +68,11 @@ class Cell:
     def place_animals(self, list_animals):
         """
         Takes a list of animals and place them in the cell.
+        The list must contain dictionaries with the correct keys and values.
+        species, age and weight are the keys
+        
         :param list_animals: list
+        if it's not a list an error will be raised
         """
         if not isinstance(list_animals, list):
             raise TypeError('list_animals myst be type list')
@@ -85,6 +94,7 @@ class Cell:
         """
         This method takes a list of animals and removes
         them from the cell
+
         :param animallist: list
         """
         for anim_to_remove in animallist:
@@ -95,7 +105,7 @@ class Cell:
 
     def feed_herbivores(self):
         """
-        Feeds Herbivores in the cell until their is no fodder, or hungry
+        Feeds Herbivores in the cell until there is no fodder, or hungry
         herbivores left
         """
         np.random.shuffle(self.herbivore)
@@ -120,7 +130,6 @@ class Cell:
     def feed_animals(self):
         """
         This method handles the entire feeding cycle for all animals
-        :return:
         """
         self.grow_fodder()
         self.feed_herbivores()
@@ -181,7 +190,6 @@ class Cell:
         """
         Checks if any of the animals die or not.
         If an animal dies it is removed from the respective list.
-        :return:
         """
         dead_herbivores = []
         for herb in self.herbivore:
@@ -208,8 +216,11 @@ class Cell:
     def migration(self, adj_cells):
         """
         An empty dictionary is created and a list of all the animals are
-        created
-        :param adj_cells: 4 tuples
+        created. At the end we also call on the set_has_migrated from animals
+        and set it to True
+
+        :param adj_cells: a list with 4 tuples
+
         :return: dict
         The empty dictionary is returned with each of the
         adjacent cells as keys and the animals in each cell as values

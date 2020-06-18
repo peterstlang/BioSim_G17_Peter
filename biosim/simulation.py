@@ -24,6 +24,9 @@ DEFAULT_MOVIE_FORMAT = 'mp4'
 
 
 class BioSim:
+    """
+    The BioSim class
+    """
 
     def __init__(self, island_map, ini_pop, seed,
                  ymax_animals=None, cmax_animals=None,
@@ -85,7 +88,9 @@ class BioSim:
     def set_animal_parameters(species, params):
         """
         Set parameters for animal species.
+
         :param species: String, name of animal species
+
         :param params: Dict with valid parameter specification for species
         """
         if species == "Herbivore":
@@ -97,7 +102,9 @@ class BioSim:
     def set_landscape_parameters(landscape, params):
         """
         Set parameters for landscape type.
+
         :param landscape: String, code letter for landscape
+
         :param params: Dict with valid parameter specification for landscape
         """
         if landscape == "L":
@@ -111,9 +118,13 @@ class BioSim:
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
         Run simulation while visualizing the result.
+
         :param num_years: number of years to simulate
+
         :param vis_years: years between visualization updates
+
         :param img_years: years between visualizations saved to files (default: vis_years)
+
         Image files will be numbered consecutively.
         """
         i = Island("""\
@@ -134,12 +145,14 @@ class BioSim:
     @staticmethod
     def rgb_map(string_input):
         """
-        This was taken from the randvis project.
         The colored island map that is displayed in the plot
         is created, this code is heavily inspired by Hans' code in
         the example directory
+
         :param string_input:
-        :return:
+        it takes the map as a multi line string
+
+        :return: a list
         """
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
                      'L': (0.0, 0.6, 0.0),  # dark green
@@ -154,6 +167,7 @@ class BioSim:
         """
         iterates through the island and gets the total number
         of herbivores and carnivores, is used for the visuals
+
         :return: dict
         The animals are sorted in a dictionary
         """
@@ -173,7 +187,8 @@ class BioSim:
 
     def add_population(self, population):
         """
-        Add a population to the island
+        Add a population to each cell on the island
+
         :param population: List of dictionaries specifying population
         """
         for cell_coord in population:
@@ -190,7 +205,9 @@ class BioSim:
         """
         Takes the number of animals throughout the island and sum
         them up
-        :return: dict
+
+        :return: a dictionary with the species as keys, and the total number of
+        animals as values
         """
         total_herbivores = sum(sum(self.heatmap_of_population()['Herbivore']))
         total_carnivores = sum(sum(self.heatmap_of_population()['Carnivore']))
@@ -199,7 +216,11 @@ class BioSim:
 
     @property
     def num_animals(self):
-        """Total number of animals on island."""
+        """
+        Total number of animals on island.
+
+        :return: the number of animals as an int
+        """
         val_sum = 0
         for key, values in self.heat_num_animals.items():
             val_sum += values
@@ -212,7 +233,7 @@ class BioSim:
 
     def save_graphic(self):
         """
-        Saves graphics to file, taken from randvis
+        Saves graphics to file, taken from randvis.
         """
 
         if self.img_base is None:

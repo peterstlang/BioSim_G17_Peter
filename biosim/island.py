@@ -24,6 +24,7 @@ class Island:
     def __init__(self, island_map_as_string):
         """
         The island class constructor
+
         :param island_map_as_string: multi line string
         the map is created using a designated method
         """
@@ -35,9 +36,10 @@ class Island:
         """
         The map is created. First we do a bunch of checks to ensure
         that the map we get is actually a valid map. Then the map is created
+
         :param multi_line_string: multi line string
-        :return: nested list
-        The map is created as a list of lists
+
+        :return: The output is a nested list
         """
         # type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
 
@@ -74,7 +76,11 @@ class Island:
     def annual_cycle(self, input_island):
         """
         The entire cycle is handled. This will repeat once every year
-        :param input_island: the map
+
+        :param input_island: When we call this in simulation the map
+        that is initiated there will be passed in this method.
+        Several of the other methods have this input_island
+        so i will simply refer to this param as the map
         """
         self.animals_feed_all(input_island)
         self.animals_procreate(input_island)
@@ -88,7 +94,9 @@ class Island:
         """
         The coordinates of the current cell is taken in,
         and the four adjacent cells are returned
+
         :param current_cell_coord: tuple
+
         :return: a list of the 4 adjacent cells
         """
         x, y = current_cell_coord
@@ -103,7 +111,8 @@ class Island:
         It then checks that the cell is habitable, then it proceeds to migrate the animals
         Lastly the animals are removed from the current cell and added to the one they have
         migrated too.
-        :param input_island: nested list
+
+        :param input_island: the map
         """
         for row, rows_of_cell_obj in enumerate(input_island):
             for col, cel in enumerate(rows_of_cell_obj):
@@ -127,7 +136,8 @@ class Island:
         """
         Here we iterate through all the cells and feed everyone
         in each cell
-        :param input_island: the island
+
+        :param input_island: the map
         """
         for cel in np.asarray(input_island).flatten():
             cel.feed_animals()
@@ -137,7 +147,8 @@ class Island:
         """
         Here we iterate through all the cells and procreate
         all the animals in each cell
-        :param input_island: the island
+
+        :param input_island: the map
         """
         for cel in np.asarray(input_island).flatten():
             cel.procreation_animals()
@@ -147,7 +158,8 @@ class Island:
         """
         Here we iterate through all the cells and
         age the animals
-        :param input_island: the island
+
+        :param input_island: the map
         """
         for cel in np.asarray(input_island).flatten():
             cel.aging_animals()
@@ -157,7 +169,8 @@ class Island:
         """
         Here we iterate through all the cells and
         make the animals lose weight
-        :param input_island: the island
+
+        :param input_island: the map
         """
         for cel in np.asarray(input_island).flatten():
             cel.animals_yearly_weight_loss()
@@ -167,7 +180,8 @@ class Island:
         """
         Here we iterate through all the cells and
         make the animals die
-        :param input_island: the island
+
+        :param input_island: the map
         """
         for cel in np.asarray(input_island).flatten():
             cel.animals_die()

@@ -18,7 +18,8 @@ class Visuals:
 
     def __init__(self):
         """
-        Constructor for visuals
+        Constructor for visuals, there are a lot of variables here
+        but all of these are called upon later.
         """
         self.fig = plt.figure(figsize=(32, 20))
         self.steps = 0
@@ -36,9 +37,9 @@ class Visuals:
 
     def set_plots(self, rgb_map=None):
         """
-
-        :param rgb_map:
-        :return:
+        Here we set up all the plots that are used for the
+        visuals
+        :param rgb_map: the rgb_map
         """
         plt.axis('off')
 
@@ -67,14 +68,18 @@ class Visuals:
                                                     , fontdict={'weight': 'bold', 'size': 16})
 
     def update_year(self):
+        """
+        This method updates the year.
+        """
         self.steps += 1
         self.changing_year.set_text("Year: " + str(self.steps))
 
     def update_heat_maps(self, anim_distribution_dict=None):
         """
         Updates the heat map as the animals move along the island
-        :param anim_distribution_dict:
-        :return:
+
+        :param anim_distribution_dict: dict
+        A dictionary with the species as keys
         """
 
         if self.herb_axis is None:
@@ -101,9 +106,9 @@ class Visuals:
 
     def update_line_plt(self, num_animals_per_species):
         """
+        This takes care of the line plot
 
-        :param num_animals_per_species:
-        :return:
+        :param num_animals_per_species: int, number of animals per species
         """
 
         self.herb_data_list.append(num_animals_per_species['Herbivore'])
