@@ -48,7 +48,8 @@ class Cell:
 
     def add_migrated_animals(self, listofanim):
         """
-        This method is used in the migration,
+        This method is used in the migration, and makes sure that the migrated
+        animals are put in the correct cells.
         it takes a list of animals and extend the corresponding list
         :param listofanim: list
         the animals has to be sorted in a list

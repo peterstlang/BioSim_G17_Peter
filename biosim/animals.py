@@ -196,6 +196,7 @@ class Animal:
         to make sure that they only migrate once. This function is called upon
         and set either True or False, depending on whether they have migrated
         or not
+
         :param boolean: bool
         """
         self.animals_has_migrated = boolean
