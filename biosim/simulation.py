@@ -144,6 +144,7 @@ class BioSim:
     @staticmethod
     def rgb_map(string_input):
         """
+        This was taken from the randvis project.
         The colored island map that is displayed in the plot
         is created, this code is heavily inspired by Hans' code in
         the example directory

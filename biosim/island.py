@@ -182,26 +182,6 @@ class Island:
         for cel in np.asarray(input_island).flatten():
             cel.animals_die()
 
-    def get_num_animals_per_species(self):
-        """
-        The number of animals per species is given
-        :return: Dict
-        Returns a dictionary with key: Animal species, and value: len of each list
-        """
-
-        animals_per_species = {}
-        num_herbs = 0
-        num_carns = 0
-
-        for cell in np.asarray(self.island).flatten():
-            num_herbs += cell.num_herbs
-            num_carns += cell.num_carns
-
-        animals_per_species['Herbivore'] = num_herbs
-        animals_per_species['Carnivore'] = num_carns
-
-        return animals_per_species
-
     def total_num_animals(self):
         """
         This lets us check the total number of animals on the island
@@ -213,21 +193,3 @@ class Island:
 
         return num_animals
 
-# if __name__ == "__main__":
-#    I = Island("""
-#    WWWW
-#    WHHW
-#    WLLW
-#    WWWW""")
-#    for cell in np.asarray(I.island).flatten():
-#        print(cell)
-
-# Spør Ta om place_animals endringen og hvordan det påvirker resten
-
-# print( np.asarray(I.island).shape)
-
-# I.island[1][1].herbivores = [Herbivore() for _ in range(50)]
-# print(len(I.island[1][1].herbivores))
-
-# I.start_migration()
-# print(len(I.island[1][1].herbivores))

@@ -75,7 +75,7 @@ class Visuals:
         if self.herb_axis is None:
             self.herb_axis = self.heatmap_herb.imshow(anim_distribution_dict['Herbivore'],
                                                       interpolation='nearest',
-                                                      cmap="Greens", vmin=0, vmax=50)
+                                                      cmap="Greens", vmin=0, vmax=200)
             self.heatmap_herb.figure.colorbar(self.herb_axis, ax=self.heatmap_herb,
                                               orientation='horizontal',
                                               fraction=0.07, pad=0.04)
@@ -85,7 +85,7 @@ class Visuals:
         if self.carn_axis is None:
             self.carn_axis = self.heatmap_carn.imshow(anim_distribution_dict['Carnivore'],
                                                       interpolation='nearest',
-                                                      cmap="OrRd", vmin=0, vmax=50)
+                                                      cmap="OrRd", vmin=0, vmax=200)
             self.heatmap_carn.figure.colorbar(self.carn_axis, ax=self.heatmap_carn,
                                               orientation='horizontal',
                                               fraction=0.07, pad=0.04)
