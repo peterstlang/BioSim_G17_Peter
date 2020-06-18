@@ -137,7 +137,6 @@ class Animal:
 
         prob_move = self.parameters['mu'] * self.fitness
         random_num = np.random.random()
-        # return True
         return prob_move > random_num
 
     def weight_at_birth(self):

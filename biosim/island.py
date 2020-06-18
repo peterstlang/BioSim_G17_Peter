@@ -30,7 +30,6 @@ class Island:
         """
         island_map_as_string = textwrap.dedent(island_map_as_string)
         self.island = self.create_map(island_map_as_string)
-        # self.rgb_map = self.create_rgb_map(island_map_as_string)
 
     def create_map(self, multi_line_string):
         """
@@ -41,7 +40,6 @@ class Island:
 
         :return: The output is a nested list
         """
-        # type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
 
         multi_line_string = multi_line_string.strip()
         list_of_lists = [list(cel) for cel in multi_line_string.splitlines()]

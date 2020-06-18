@@ -248,6 +248,3 @@ class BioSim:
         """Create MPEG4 movie from visualization images saved."""
         pass
 
-# if __name__ == "__main__":
-# i = Island('WW')
-# print(i.create_rgb_map('WW'))
