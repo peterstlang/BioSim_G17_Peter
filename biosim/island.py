@@ -171,14 +171,3 @@ class Island:
         """
         for cel in np.asarray(input_island).flatten():
             cel.animals_die()
-
-    def total_num_animals(self):
-        """
-        This lets us check the total number of animals on the island
-        :return: int
-        """
-        num_animals = 0
-        for cell in np.asarray(self.island).flatten():
-            num_animals += cell.total_num_animals()
-
-        return num_animals
