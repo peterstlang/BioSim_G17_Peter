@@ -116,8 +116,8 @@ class BioSim:
         :param img_years: years between visualizations saved to files (default: vis_years)
         Image files will be numbered consecutively.
         """
-        # self.x_axis_limit += num_years
-        i = Island("WW")
+        i = Island("""\
+               WW""")
         for yr in range(num_years):
             self.current_year += 1
             i.annual_cycle(self.island)
@@ -127,19 +127,6 @@ class BioSim:
             self.visuals.update_year()
 
             self.save_graphic()
-
-    # def map_length(self):
-    #     """
-    #     The length of each map axis is calculated
-    #     :return: 2 int
-    #     We get the horizontal and vertical length of the map
-
-    #     """
-    #     lines = self.inserted_map.strip()
-    #     lines = lines.split('\n')
-    #     x_map = len(lines[0])
-    #     y_map = len(lines)
-    #     return x_map, y_map
 
     @staticmethod
     def rgb_map(string_input):
@@ -162,22 +149,23 @@ class BioSim:
 
     def heatmap_of_population(self):
         """
-
+        iterates through the island and gets the total number
+        of herbivores and carnivores, is used for the visuals
         :return: dict
+        The animals are sorted in a dictionary
         """
         row_num = np.shape(self.island)[0]
         column_num = np.shape(self.island)[1]
 
-        h_matrix = np.zeros((row_num, column_num))
-        c_matrix = np.zeros((row_num, column_num))
+        herb_arr = np.zeros((row_num, column_num))
+        carn_arr = np.zeros((row_num, column_num))
 
         for row, lines in enumerate(self.island):
             for col, cell in enumerate(lines):
-                # print(cell.herb_list)
-                h_matrix[row][col] = len(cell.herbivore)
-                c_matrix[row][col] = len(cell.carnivore)
+                herb_arr[row][col] = len(cell.herbivore)
+                carn_arr[row][col] = len(cell.carnivore)
 
-        animal_distribution_dict = {"Herbivore": h_matrix, "Carnivore": c_matrix}
+        animal_distribution_dict = {"Herbivore": herb_arr, "Carnivore": carn_arr}
         return animal_distribution_dict
 
     def add_population(self, population):
@@ -196,11 +184,14 @@ class BioSim:
 
     @property
     def heat_num_animals(self):
-        """Total number of animals on island."""
+        """
+        Takes the number of animals throughout the island and sum
+        them up
+        :return: dict
+        """
         total_herbivores = sum(sum(self.heatmap_of_population()['Herbivore']))
         total_carnivores = sum(sum(self.heatmap_of_population()['Carnivore']))
         animal_count_dict = {"Herbivore": total_herbivores, "Carnivore": total_carnivores}
-        print(animal_count_dict)
         return animal_count_dict
 
     @property
