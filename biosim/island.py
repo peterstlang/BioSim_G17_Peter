@@ -71,16 +71,6 @@ class Island:
 
         return cells_object_list_of_list
 
-    def populate_cells(self, population):
-        """
-        The population is taken in and placed in the cells on the island.
-        :param population:
-        """
-
-        for cell_coord in population:
-            x, y = cell_coord.get('loc')
-            self.island[x][y].place_animals(cell_coord.get('pop'))
-
     def annual_cycle(self, input_island):
         """
         The entire cycle is handled. This will repeat once every year
@@ -192,4 +182,3 @@ class Island:
             num_animals += cell.total_num_animals()
 
         return num_animals
-
