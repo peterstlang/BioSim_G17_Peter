@@ -27,37 +27,37 @@ import os.path
 from biosim.simulation import BioSim
 
 
-def test_empty_island(): # works
+def test_empty_island():
     """Empty island can be created"""
     BioSim(island_map="WW\nWW", ini_pop=[], seed=1)
 
 
-def test_minimal_island(): # works
+def test_minimal_island():
     """Island of single jungle cell"""
     BioSim(island_map="WWW\nWLW\nWWW", ini_pop=[], seed=1)
 
 
-def test_all_types(): # works
+def test_all_types():
     """All types of landscape can be created"""
     BioSim(island_map="WWWW\nWLHW\nWWDW\nWWWW", ini_pop=[], seed=1)
 
 
 @pytest.mark.parametrize('bad_boundary',
                          ['L', 'H', 'D'])
-def test_invalid_boundary(bad_boundary): # works
+def test_invalid_boundary(bad_boundary):
     """Non-ocean boundary must raise error"""
     with pytest.raises(ValueError):
         BioSim(island_map="{}WW\nWLW\nWWW".format(bad_boundary),
                ini_pop=[], seed=1)
 
 
-def test_invalid_landscape(): # Pases
+def test_invalid_landscape():
     """Invalid landscape type must raise error"""
     with pytest.raises(ValueError):
         BioSim(island_map="WWW\nWRW\nWWW", ini_pop=[], seed=1)
 
 
-def test_inconsistent_length(): # Pases
+def test_inconsistent_length():
     """Inconsistent line length must raise error"""
     with pytest.raises(ValueError):
         BioSim(island_map="WWW\nWLLW\nWWW", ini_pop=[], seed=1)
@@ -66,7 +66,7 @@ def test_inconsistent_length(): # Pases
 @pytest.mark.parametrize('species, extra',
                          [('Herbivore', {}),
                           ('Carnivore', {'DeltaPhiMax': 0.5})])
-def test_set_param_animals(species, extra): # Works
+def test_set_param_animals(species, extra):
     """Parameters can be set on animal classes"""
 
     params = {'w_birth': 8.,
@@ -91,13 +91,13 @@ def test_set_param_animals(species, extra): # Works
 @pytest.mark.parametrize('lscape, params',
                          [('L', {'f_max': 100.}),
                           ('H', {'f_max': 200.})])
-def test_set_param_landscape(lscape, params): # works
+def test_set_param_landscape(lscape, params):
     """Parameters can be set on landscape classes"""
 
     BioSim(island_map="W", ini_pop=[], seed=1).set_landscape_parameters(lscape, params)
 
 
-def test_initial_population(): # works
+def test_initial_population():
     """Test that population can be placed on construction"""
 
     BioSim(island_map="WWWW\nWLHW\nWWWW",
@@ -118,7 +118,7 @@ def plain_sim():
                   seed=1)
 
 
-def test_add_population(plain_sim): #works
+def test_add_population(plain_sim):
     """Test that population can be added to simulation"""
 
     plain_sim.add_population([{'loc': (2, 2),
@@ -129,20 +129,20 @@ def test_add_population(plain_sim): #works
                                        {'species': 'Carnivore', 'age': 1, 'weight': 10.}]}])
 
 
-def test_simulate(plain_sim): # works
+def test_simulate(plain_sim):
     """Test that simulation can be called with visualization step values"""
 
     plain_sim.simulate(num_years=10, vis_years=100, img_years=100)
 
 
-def test_multi_simulate(plain_sim): # works
+def test_multi_simulate(plain_sim):
     """Test that simulation can be called repeatedly"""
 
     plain_sim.simulate(num_years=10, vis_years=100, img_years=100)
     plain_sim.simulate(num_years=10, vis_years=100, img_years=100)
 
 
-def test_get_years(plain_sim): # works
+def test_get_years(plain_sim):
     """Test that number of years simulated is available"""
 
     plain_sim.simulate(num_years=2, vis_years=100, img_years=100)
@@ -151,19 +151,19 @@ def test_get_years(plain_sim): # works
     assert plain_sim.year == 5
 
 
-def test_get_num_animals(plain_sim): #  works
+def test_get_num_animals(plain_sim):
     """Test that total number of animals is available"""
 
     assert plain_sim.num_animals == 0
 
 
-def test_get_animals_per_species(plain_sim): # works
+def test_get_animals_per_species(plain_sim):
     """Test that total number of animals per species is available"""
 
     assert plain_sim.num_animals_per_species == {'Herbivore': 0, 'Carnivore': 0}
 
 
-def test_set_plot_limits(): # works
+def test_set_plot_limits():
     """Test that y-axis and color limits for plots can be set."""
     BioSim(island_map='W', ini_pop=[], seed=1, ymax_animals=20,
            cmax_animals={'Herbivore': 10, 'Carnivore': 20})

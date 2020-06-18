@@ -294,3 +294,4 @@ class Carnivore(Animal):
             if eaten_amount >= self.parameters['F']:
                 break
         return surv_herbs
+

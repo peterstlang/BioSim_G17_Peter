@@ -7,9 +7,8 @@
 __author__ = 'Peter Langdalen'
 __email__ = 'pelangda@nmbu.no'
 import numpy as np
-from biosim.animals import Animal, Herbivore, Carnivore
+from biosim.animals import Herbivore, Carnivore
 import operator
-import matplotlib.pyplot as plt
 
 
 class Cell:
@@ -116,8 +115,6 @@ class Cell:
 
         for carn in self.carnivore:
             self.herbivore = carn.eat_a_herb(self.herbivore)
-            # surviving_herbs = [herb for herb in self.herbivores if herb not in dead_herbs]
-            # self.herbivores = surviving_herbs
 
     def feed_animals(self):
         """
@@ -199,40 +196,6 @@ class Cell:
         for dead_carn in dead_carnivores:
             self.carnivore.remove(dead_carn)
 
-    def get_num_animals(self):
-        """
-        Gives the number of animals in a cell
-        :return: tuple
-        the number of animals is returned as a tuple,
-        where the leftmost value is herbivores, and the rightmost one
-        is carnivores
-        """
-        return len(self.herbivore), len(self.carnivore)
-
-    @property
-    def num_herbs(self):
-        """
-        :return: int
-        Returns the number of herbivores as an int
-        """
-        return len(self.herbivore)
-
-    @property
-    def num_carns(self):
-        """
-        :return: int
-        This returns how many carnivores is in the list as an int
-        """
-        return len(self.carnivore)
-
-    def total_num_animals(self):
-        """
-        :return: int
-        This returns the total number of animals as an int
-        instead of a tuple
-        """
-        return len(self.herbivore) + len(self.carnivore)
-
     def get_remaining_fodder(self):
         """
         Returns the amount of fodder left in a cell.
@@ -257,7 +220,6 @@ class Cell:
         for anim in anim_list:
             if anim.will_move() and not anim.animals_has_migrated:
                 destination_cell = np.random.choice(adj_cells)
-                # print(destination_cell)
                 if destination_cell in anims_that_migrate.keys():
                     anims_that_migrate[destination_cell].append(anim)
                 else:
@@ -336,34 +298,3 @@ class Highland(Cell):
         its 300 by default but can be changed
         """
         self.fodder = self.parameters['f_max']
-
-# if __name__ == "__main__":
-# This code was written by Professor Hans
-# seeds = range(200, 205)
-# years = 250
-# mean_counts = np.zeros((len(seeds), 2))
-# for sn, seed in enumerate(seeds):
-#    np.random.seed(seed)
-#    c = Lowland()
-#    herbs = list()
-#    for i in range(50):
-#        herbs.append(Herbivore(5, 20))
-#    carns = list()
-#    for i in range(20):
-#        carns.append(Carnivore(5, 20))
-#    c.place_animals(herbs)
-#    num_animals = np.zeros((years, 2))
-#    for i in range(years):
-#        if i == 50:
-#            c.place_animals(carns)
-#        c.feed_animals()
-#        c.procreation_animals()
-#        c.aging_animals()
-#        c.animals_yearly_weight_loss()
-#        c.animals_die()
-#        num_animals[i, :] = c.get_num_animals()
-#    mean_counts[sn, :] = num_animals[150:, :].mean(axis=0)
-#    plt.plot(num_animals)
-# mean_counts = mean_counts[mean_counts[:, 0].argsort()]
-# print(mean_counts)
-# plt.show()
