@@ -13,8 +13,7 @@ import numpy as np
 class Animal:
 
     """
-    This is the superclass we will be using for all animals and it will contain
-    methods that applies to both herbivores and carnivores
+    This is documentation for the Animal class
     """
 
     parameters = {}

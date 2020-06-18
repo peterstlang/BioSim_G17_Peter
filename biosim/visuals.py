@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 class Visuals:
     """
-    The class for all the visuals and plots
+    This is documentation for the Visuals class
     """
 
     def __init__(self):

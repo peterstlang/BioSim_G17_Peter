@@ -13,8 +13,7 @@ import operator
 
 class Cell:
     """
-    Cell superclass.
-    This is where animals will reside and the yearly cycle will occur
+    This is documentation for the Cell class
     """
     parameters = {}
 

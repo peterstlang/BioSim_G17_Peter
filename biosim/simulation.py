@@ -25,7 +25,7 @@ DEFAULT_MOVIE_FORMAT = 'mp4'
 
 class BioSim:
     """
-    The BioSim class
+    This is documentation for the Biosim class
     """
 
     def __init__(self, island_map, ini_pop, seed,

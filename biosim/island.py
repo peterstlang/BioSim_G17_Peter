@@ -15,7 +15,7 @@ import textwrap
 
 class Island:
     """
-    The island class.
+    This is documentation for the Island class
     """
     type_of_landscape = {'W': Water, 'L': Lowland, 'H': Highland, 'D': Desert}
     valid_landscape_types = (Lowland, Highland, Desert)
