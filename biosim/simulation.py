@@ -12,14 +12,22 @@ from biosim.landscape import Lowland, Highland, Desert, Water
 from biosim.island import Island
 from biosim.visuals import Visuals
 import numpy as np
-import pandas as pd
+import matplotlib.pyplot as plt
+import os
+
+FFMPEG_BINARY = 'ffmpeg'
+CONVERT_BINARY = 'magick'
+
+DEFAULT_GRAPHICS_DIR = os.path.join('fig_pics/')
+DEFAULT_GRAPHICS_NAME = 'bs'
+DEFAULT_MOVIE_FORMAT = 'mp4'
 
 
 class BioSim:
 
     def __init__(self, island_map, ini_pop, seed,
                  ymax_animals=None, cmax_animals=None,
-                 hist_specs=None, img_base=None, img_fmt="png"):
+                 hist_specs=None, img_base=None, img_fmt='png'):
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
@@ -44,10 +52,9 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-        self.current_year = -1
+        self.current_year = 0
         self.final_year = None
         self.island = Island(island_map).island
-        # self.rgb_map = Island.create_rgb_map(island_map)
 
         if ymax_animals is None:
             ymax_animals = 20000
@@ -67,6 +74,8 @@ class BioSim:
         self.add_population(ini_pop)
         self.seed = np.random.seed(seed)
         self.img_fmt = img_fmt
+        self.img_ctr = 0
+        self.img_base = img_base
 
         self.visuals = Visuals()
 
@@ -112,33 +121,33 @@ class BioSim:
         for yr in range(num_years):
             self.current_year += 1
             i.annual_cycle(self.island)
-
-            # print( self.heatmap_of_population() )
             self.visuals.update_heat_maps(anim_distribution_dict=self.heatmap_of_population()
                                           )
             self.visuals.update_line_plt(self.heat_num_animals)
-
             self.visuals.update_year()
 
-    def map_length(self):
-        """
-        The length of each map axis is calculated
-        :return: 2 int
-        We get the horizontal and vertical length of the map
+            self.save_graphic()
 
-        """
-        lines = self.inserted_map.strip()
-        lines = lines.split('\n')
-        x_map = len(lines[0])
-        y_map = len(lines)
-        return x_map, y_map
+    # def map_length(self):
+    #     """
+    #     The length of each map axis is calculated
+    #     :return: 2 int
+    #     We get the horizontal and vertical length of the map
 
-    def rgb_map(self, str_raw_val):
+    #     """
+    #     lines = self.inserted_map.strip()
+    #     lines = lines.split('\n')
+    #     x_map = len(lines[0])
+    #     y_map = len(lines)
+    #     return x_map, y_map
+
+    @staticmethod
+    def rgb_map(string_input):
         """
         The colored island map that is displayed in the plot
         is created, this code is heavily inspired by Hans' code in
         the example directory
-        :param str_raw_val:
+        :param string_input:
         :return:
         """
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
@@ -146,7 +155,7 @@ class BioSim:
                      'H': (0.5, 1.0, 0.5),  # light green
                      'D': (1.0, 1.0, 0.5)}  # light yellow
         map_rgb = [[rgb_value[col] for col in row]
-                   for row in str_raw_val.splitlines()]
+                   for row in string_input.splitlines()]
 
         return map_rgb
 
@@ -175,8 +184,6 @@ class BioSim:
         Add a population to the island
         :param population: List of dictionaries specifying population
         """
-        # self.island.populate_cells(population)
-
         for cell_coord in population:
             x, y = cell_coord.get('loc')
             self.island[x][y].place_animals(cell_coord.get('pop'))
@@ -194,20 +201,32 @@ class BioSim:
         animal_count_dict = {"Herbivore": total_herbivores, "Carnivore": total_carnivores}
         print(animal_count_dict)
         return animal_count_dict
-        # return self.island.total_num_animals()
 
     @property
     def num_animals(self):
         """Total number of animals on island."""
-        sum = 0
+        val_sum = 0
         for key, values in self.heat_num_animals.items():
-            sum += values
-        return sum
+            val_sum += values
+        return val_sum
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
         return self.heat_num_animals
+
+    def save_graphic(self):
+        """
+        Saves graphics to file, taken from randvis
+        """
+
+        if self.img_base is None:
+            return
+
+        plt.savefig('{base}_{num:05d}.{type}'.format(base=self.img_base,
+                                                     num=self.img_ctr,
+                                                     type=self.img_fmt))
+        self.img_ctr += 1
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""

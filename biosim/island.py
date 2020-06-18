@@ -93,7 +93,8 @@ class Island:
         self.animals_weightloss(input_island)
         self.animals_die(input_island)
 
-    def get_adjacent_cells(self, current_cell_coord):
+    @staticmethod
+    def get_adjacent_cells(current_cell_coord):
         """
         The coordinates of the current cell is taken in,
         and the four adjacent cells are returned
@@ -131,7 +132,8 @@ class Island:
                             migrating_cell.add_migrated_animals(values)
                             cel.remove_animals(values)
 
-    def animals_feed_all(self, input_island):
+    @staticmethod
+    def animals_feed_all(input_island):
         """
         Here we iterate through all the cells and feed everyone
         in each cell
@@ -140,7 +142,8 @@ class Island:
         for cel in np.asarray(input_island).flatten():
             cel.feed_animals()
 
-    def animals_procreate(self, input_island):
+    @staticmethod
+    def animals_procreate(input_island):
         """
         Here we iterate through all the cells and procreate
         all the animals in each cell
@@ -149,7 +152,8 @@ class Island:
         for cel in np.asarray(input_island).flatten():
             cel.procreation_animals()
 
-    def animals_age(self, input_island):
+    @staticmethod
+    def animals_age(input_island):
         """
         Here we iterate through all the cells and
         age the animals
@@ -158,7 +162,8 @@ class Island:
         for cel in np.asarray(input_island).flatten():
             cel.aging_animals()
 
-    def animals_weightloss(self, input_island):
+    @staticmethod
+    def animals_weightloss(input_island):
         """
         Here we iterate through all the cells and
         make the animals lose weight
@@ -167,7 +172,8 @@ class Island:
         for cel in np.asarray(input_island).flatten():
             cel.animals_yearly_weight_loss()
 
-    def animals_die(self, input_island):
+    @staticmethod
+    def animals_die(input_island):
         """
         Here we iterate through all the cells and
         make the animals die
