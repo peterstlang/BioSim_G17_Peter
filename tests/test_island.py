@@ -12,6 +12,7 @@ from biosim.landscape import Cell, Lowland, Highland, Desert, Water
 from biosim.island import Island
 import pytest
 import textwrap
+import numpy as np
 
 default_map = """
     WWWWWWWWWWWWWWWWWWWWW
@@ -39,5 +40,13 @@ class TestIsland:
         """
         i = Island(default_map)
         assert hasattr(i, 'island')
+
+    def test_wrong_map(self):
+        with pytest.raises(ValueError):
+            i = Island("""WL
+                          LW""")
+            i.create_map("""WL
+                            LW""")
+
 
 
