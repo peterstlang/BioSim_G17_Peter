@@ -121,12 +121,15 @@ class BioSim:
         for yr in range(num_years):
             self.current_year += 1
             i.annual_cycle(self.island)
-            self.visuals.update_heat_maps(anim_distribution_dict=self.heatmap_of_population()
-                                          )
-            self.visuals.update_line_plt(self.heat_num_animals)
-            self.visuals.update_year()
+            if yr % vis_years == 0:
 
-            self.save_graphic()
+                self.visuals.update_heat_maps(anim_distribution_dict=self.heatmap_of_population()
+                                          )
+                self.visuals.update_line_plt(self.heat_num_animals)
+                self.visuals.update_year()
+
+            if yr % img_years == 0:
+                self.save_graphic()
 
     @staticmethod
     def rgb_map(string_input):
