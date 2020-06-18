@@ -13,8 +13,15 @@ import pytest
 
 
 class TestCell:
+    """
+    the Cell testclass
+    """
 
     def test_constructor(self):
+        """
+        Tests that the subclasses are created
+        :return:
+        """
         ll = Lowland()
         h = Highland()
         d = Desert()
@@ -25,15 +32,27 @@ class TestCell:
         assert isinstance(w, Water)
 
     def test_type_error_parameters(self):
+        """
+        Tests that a TypeError is raised when you don't input a dictionary in set_parameters
+        :return:
+        """
         with pytest.raises(TypeError):
             ll = Lowland
             ll.set_parameters([1, 2, 3])
 
     def test_is_there_fodder(self):
+        """
+        Tests that there is fodder in a Lowland cell
+        :return:
+        """
         ll = Lowland()
         assert ll.fodder == 800
 
     def test_place_animals(self):
+        """
+        Tests that Animals can be placed in a cell
+        :return:
+        """
         c = Cell()
         herbs = [{'species': 'Herbivore',
                            'age': 5,
@@ -48,6 +67,10 @@ class TestCell:
         assert c.place_animals(carns) == c.carnivore.append(carns)
 
     def test_procreation(self, mocker):
+        """
+        Tests that animals can procreate
+        :return:
+        """
         mocker.patch('numpy.random.random', return_value=0)
         l = Lowland()
         l.herbivore = [Herbivore(5, 50), Herbivore(5, 50)]
@@ -58,6 +81,10 @@ class TestCell:
         assert len(l.carnivore) >= 3
 
     def test_animals_die(self):
+        """
+        Tests that animals die
+        :return:
+        """
         c = Cell()
         c.herbivore = [Herbivore(5, 0), Herbivore(5, 100)]
         c.carnivore = [Carnivore(5, 0), Carnivore(5, 100)]

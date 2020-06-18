@@ -33,6 +33,9 @@ default_map = textwrap.dedent(default_map)
 
 
 class TestIsland:
+    """
+    The island testclass
+    """
 
     def test_constructor(self):
         """
@@ -42,6 +45,10 @@ class TestIsland:
         assert hasattr(i, 'island')
 
     def test_wrong_map(self):
+        """
+        Tests that a ValueError is raised when you input a map
+        that doesn't have the correct borders (only water cells)
+        """
         with pytest.raises(ValueError):
             i = Island("""WL
                           LW""")
